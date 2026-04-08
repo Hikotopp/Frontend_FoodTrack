@@ -1,0 +1,40 @@
+.marco-login {
+  background: rgba(120, 0, 0, 0.20);
+  padding: 40px 60px;
+  text-align: center;
+  border: 2px solid #caa15a;
+  backdrop-filter: blur(8px);
+  position: relative;
+  z-index: 2;
+  width: 420px;
+
+  clip-path: polygon(
+    20px 0%, 
+    calc(100% - 20px) 0%, 
+    100% 20px, 
+    100% calc(100% - 20px), 
+    calc(100% - 20px) 100%, 
+    20px 100%, 
+    0% calc(100% - 20px), 
+    0% 20px
+  );
+}
+.form-group {
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+.form-group label {
+  display: block;
+  color: #f5d7a1;
+  font-size: 14px;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 10px;
+  border-radius: 20px;
+  border: none;
+  margin-top: 5px;
+  outline: none;
+}
