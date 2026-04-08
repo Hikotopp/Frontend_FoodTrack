@@ -146,3 +146,14 @@
   background: #27ae60;
   color: white;
 }
+
+
+.error-mensaje {
+  background-color: #f8d7da;
+  color: #721c24;
+  padding: 10px;
+  border-radius: 5px;
+  margin-bottom: 15px;
+  text-align: center;
+  font-size: 14px;
+}

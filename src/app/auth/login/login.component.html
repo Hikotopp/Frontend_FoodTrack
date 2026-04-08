@@ -1,30 +1,48 @@
 <div class="login">
 
-  <!-- LOGO ARRIBA IZQUIERDA -->
   <div class="top-bar">
     <h1 class="foodtrack-title">FoodTrack</h1>
   </div>
 
-  <!-- CONTENIDO -->
   <div class="center">
     <div class="marco-login">
 
       <h1 class="titulo">INICIO DE SESIÓN</h1>
 
-      <div class="form-group">
-        <label>CORREO</label>
-        <input type="email" />
+      <div *ngIf="error" class="error-mensaje">
+        {{ error }}
       </div>
 
-      <div class="form-group">
-        <label>CONTRASEÑA</label>
-        <input type="password" />
-      </div>
+      <form (ngSubmit)="onSubmit()">
 
-      <div class="acciones">
-        <button type="button" class="btn-outline" routerLink="/">Cancelar</button>
-        <button class="btn-primary" routerLink="/mesas">Continuar</button>
-      </div>
+        <div class="form-group">
+          <label>USUARIO</label>
+          <input 
+            type="text" 
+            [(ngModel)]="usuario" 
+            name="usuario"
+            placeholder="Ingrese su usuario"
+            required />
+        </div>
+
+        <div class="form-group">
+          <label>CONTRASEÑA</label>
+          <input 
+            type="password" 
+            [(ngModel)]="contrasena" 
+            name="contrasena"
+            placeholder="Ingrese su contraseña"
+            required />
+        </div>
+
+        <div class="acciones">
+          <button type="button" class="btn-outline" routerLink="/">Cancelar</button>
+          <button type="submit" class="btn-primary" [disabled]="cargando">
+            {{ cargando ? 'Ingresando...' : 'Continuar' }}
+          </button>
+        </div>
+
+      </form>
 
     </div>
   </div>
