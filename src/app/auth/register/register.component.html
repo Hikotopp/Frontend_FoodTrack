@@ -1,43 +1,34 @@
 <div class="login">
-
-  <!-- LOGO -->
   <div class="top-bar">
     <h1 class="foodtrack-title">FoodTrack</h1>
   </div>
-
-  <!-- CONTENIDO -->
   <div class="center">
     <div class="marco-login">
-
       <h1 class="titulo">CREAR CUENTA</h1>
-
-      <div class="form-group">
-        <label>TIPO DE USUARIO</label>
-        <input type="text" />
-      </div>
-
       <div class="form-group">
         <label>NOMBRE COMPLETO</label>
-        <input type="text" />
+        <input type="text" [(ngModel)]="usuario.nombre" />
       </div>
-
       <div class="form-group">
         <label>CORREO</label>
-        <input type="email" />
+        <input type="email" [(ngModel)]="usuario.email" />
       </div>
-
       <div class="form-group">
         <label>CONTRASEÑA</label>
-        <input type="password" />
+        <input type="password" [(ngModel)]="usuario.password" />
       </div>
-
-      <!-- BOTONES -->
+      <div class="form-group">
+        <label>ROL</label>
+        <select [(ngModel)]="usuario.rol">
+          <option value="EMPLEADO">EMPLEADO</option>
+          <option value="ADMIN">ADMIN</option>
+        </select>
+      </div>
       <div class="acciones">
-        <button class="btn-outline" routerLink="/">Cancelar</button>
-        <button class="btn-primary" routerLink="/login">Continuar</button>
+        <button class="btn-outline" (click)="cancelar()">Cancelar</button>
+        <button class="btn-primary" (click)="onSubmit()">Continuar</button>
       </div>
-
+      <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
     </div>
   </div>
-
 </div>

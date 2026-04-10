@@ -1,38 +1,86 @@
-import { Component } from '@angular/core';
-import { NgFor } from '@angular/common';
-import { Router, RouterLink } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
+import { MesaService, Mesa } from '../../services/mesa.service';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-mesas',
   standalone: true,
-  imports: [NgFor, RouterLink],
+  imports: [CommonModule],
   templateUrl: './mesas.component.html',
   styleUrls: ['./mesas.component.css']
 })
-export class MesasComponent {
+export class MesasComponent implements OnInit {
+  mesas: Mesa[] = [];
 
-  mesas: number[] = [];
+  constructor(
+    private mesaService: MesaService,
+    private authService: AuthService,
+    private router: Router
+  ) { }
 
-  constructor(private router: Router) {
-    this.agregarMesa();
+  ngOnInit(): void {
+    this.cargarMesas();
   }
 
-  agregarMesa() {
-    const nueva = this.mesas.length + 1;
-    this.mesas.push(nueva);
+  cargarMesas(): void {
+    this.mesaService.listar().subscribe({
+      next: (data) => {
+        this.mesas = data;
+      },
+      error: (err) => {
+        console.error('Error al cargar mesas', err);
+        if (err.status === 401) {
+          this.authService.logout();
+          this.router.navigate(['/login']);
+        }
+      }
+    });
   }
 
-  quitarMesa() {
+  agregarMesa(): void {
+    const nuevoNumero = this.mesas.length > 0 ? Math.max(...this.mesas.map(m => m.numero)) + 1 : 1;
+    const nuevaMesa: Mesa = {
+      numero: nuevoNumero,
+      capacidad: 4,
+      estado: 'LIBRE',
+      ubicacion: 'Sala principal'
+    };
+    this.mesaService.crear(nuevaMesa).subscribe({
+      next: () => this.cargarMesas(),
+      error: (err) => console.error(err)
+    });
+  }
+
+  quitarMesa(): void {
     if (this.mesas.length > 0) {
-      this.mesas.pop();
+      const ultimaMesa = this.mesas[this.mesas.length - 1];
+      if (ultimaMesa.id) {
+        this.mesaService.eliminar(ultimaMesa.id).subscribe({
+          next: () => this.cargarMesas(),
+          error: (err) => console.error(err)
+        });
+      }
     }
   }
 
-  irAMesa(id: number) {
-    console.log("Mesa seleccionada:", id);
+  cambiarEstado(mesa: Mesa): void {
+    let nuevoEstado: string;
+    if (mesa.estado === 'LIBRE') nuevoEstado = 'OCUPADA';
+    else if (mesa.estado === 'OCUPADA') nuevoEstado = 'RESERVADA';
+    else nuevoEstado = 'LIBRE';
+    
+    if (mesa.id) {
+      this.mesaService.cambiarEstado(mesa.id, nuevoEstado).subscribe({
+        next: () => this.cargarMesas(),
+        error: (err) => console.error(err)
+      });
+    }
   }
 
-  cerrarSesion() {
+  cerrarSesion(): void {
+    this.authService.logout();
     this.router.navigate(['/']);
   }
 }

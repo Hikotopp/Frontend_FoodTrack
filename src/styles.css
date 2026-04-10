@@ -176,3 +176,11 @@
   background: #27ae60;
   color: white;
 }
+
+
+.error-message {
+  color: #e74c3c;
+  margin-top: 15px;
+  font-size: 14px;
+  text-align: center;
+}
