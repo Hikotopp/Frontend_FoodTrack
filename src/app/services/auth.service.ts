@@ -10,6 +10,13 @@ export interface LoginResponse {
   usuario: string;
 }
 
+export interface RegisterData {
+  username: string;
+  email: string;
+  contrasena: string;
+  rol: string;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -20,6 +27,10 @@ export class AuthService {
 
   login(usuario: string, contrasena: string): Observable<LoginResponse> {
     return this.http.post<LoginResponse>(`${this.apiUrl}/auth/login`, { usuario, contrasena });
+  }
+
+  register(userData: RegisterData): Observable<any> {
+    return this.http.post(`${this.apiUrl}/usuarios`, userData);
   }
 
   guardarToken(token: string): void {
