@@ -20,6 +20,21 @@
   letter-spacing: 2px;
   margin: 0;
 }
+
+.page-title {
+  font-family: "Playfair Display", serif;
+  font-size: 36px;
+  letter-spacing: 2px;
+  color: #f5d7a1;
+  margin-bottom: 16px;
+}
+
+.login-container h2,
+.register-container h2,
+.home-page p {
+  color: #f5d7a1;
+  margin-bottom: 20px;
+}
 .btn-outline {
   background: transparent;
   border: 1px solid #caa15a;

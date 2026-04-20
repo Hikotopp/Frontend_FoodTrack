@@ -10,6 +10,7 @@ import { AuthService } from '../../services/auth.service';
   imports: [CommonModule, FormsModule],
   template: `
     <div class="login-container">
+      <h1 class="page-title">FoodTrack</h1>
       <h2>Iniciar sesión</h2>
       <form (ngSubmit)="login()">
         <div>
