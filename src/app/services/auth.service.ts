@@ -2,25 +2,12 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
-
-export interface LoginResponse {
-  token: string;
-  tipoUsuario: string;
-  nombre: string;
-  usuario: string;
-}
-
-export interface RegisterData {
-  username: string;
-  email: string;
-  contrasena: string;
-  rol: string;
-}
+import { AuthRepository, LoginResponse, RegisterData } from '../domain/ports/out/auth.repository';
 
 @Injectable({
   providedIn: 'root'
 })
-export class AuthService {
+export class AuthService implements AuthRepository {
   private apiUrl = environment.apiUrl;
 
   constructor(private http: HttpClient) { }
