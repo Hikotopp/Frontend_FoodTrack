@@ -4,14 +4,23 @@
   box-sizing: border-box;
 }
 
-.btn-primary {
-  background: transparent;
-  border: 1px solid #caa15a;
-  padding: 8px 16px;
-  color: #caa15a;
-  border-radius: 6px;
-  cursor: pointer;
+html,
+body {
+  min-height: 100%;
+  background: #120c0b;
+  font-family: "Playfair Display", serif;
 }
+
+body {
+  color: #f7f0df;
+}
+
+button,
+input,
+select {
+  font: inherit;
+}
+
 .foodtrack-title {
   font-size: 20px;
   color: #f5d7a1;
@@ -20,167 +29,26 @@
   letter-spacing: 2px;
   margin: 0;
 }
+
+.btn-primary,
 .btn-outline {
   background: transparent;
   border: 1px solid #caa15a;
-  padding: 8px 16px;
+  padding: 10px 16px;
   color: #caa15a;
-  border-radius: 6px;
+  border-radius: 12px;
   cursor: pointer;
-}
-/* CONTENEDOR */
-.login {
-  width: 100vw;
-  height: 100vh;
-  background-image: url('/assets/fondo.png');
-  background-size: cover;
-  background-position: center;
-  position: relative;
-  color: white;
+  transition: transform 0.2s ease, opacity 0.2s ease, border-color 0.2s ease;
 }
 
-/* OVERLAY */
-.login::before {
-  content: "";
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.6);
-  top: 0;
-  left: 0;
+.btn-primary:hover,
+.btn-outline:hover {
+  transform: translateY(-1px);
+  border-color: #f0cf90;
 }
 
-/* LOGO */
-.top-bar {
-  position: absolute;
-  top: 25px;
-  left: 50px;
-  z-index: 2;
-}
-
-.logo {
-  font-size: 24px;
-  font-weight: bold;
-}
-
-/* CENTRADO */
-.center {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  animation: fadeIn 0.8s ease;
-}
-
-.marco-login {
-  background: rgba(120, 0, 0, 0.20);
-  padding: 50px 70px;
-  text-align: center;
-  border: 2px solid #caa15a;
-  backdrop-filter: blur(8px);
-  position: relative;
-  z-index: 2;
-  width: 400px;
-
-
-  clip-path: polygon(
-    20px 0%, 
-    calc(100% - 20px) 0%, 
-    100% 20px, 
-    100% calc(100% - 20px), 
-    calc(100% - 20px) 100%, 
-    20px 100%, 
-    0% calc(100% - 20px), 
-    0% 20px
-  );
-}
-/* ANIMACIÓN (FUERA) */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translate(-50%, -60%);
-  }
-  to {
-    opacity: 1;
-    transform: translate(-50%, -50%);
-  }
-}
-
-/* TITULO */
-.titulo {
-  font-family: "Playfair Display", serif;
-  font-size: 32px;
-  color: #f5d7a1;
-  margin-bottom: 30px;
-  letter-spacing: 3px;
-}
-
-/* FORM */
-.form-group {
-  margin-bottom: 20px;
-  text-align: left;
-}
-
-.form-group label {
-  color: #f5d7a1;
-  font-size: 14px;
-}
-
-/* INPUTS ESTILO PASTILLA */
-.form-group input {
-  width: 100%;
-  padding: 10px;
-  border-radius: 20px;
-  border: none;
-  margin-top: 5px;
-  outline: none;
-}
-
-/* BOTONES */
-.acciones {
-  margin-top: 30px;
-  display: flex;
-  justify-content: center;
-  gap: 15px;
-}
-
-.btn {
-  padding: 8px 18px;
-  border-radius: 20px;
-  border: none;
-  cursor: pointer;
-  font-size: 14px;
-  font-weight: 500;
-  transition: all 0.3s ease;
-}
-
-/* COLORES EXACTOS */
-.red {
-  background: #c0392b;
-}
-
-.green {
-  background: #27ae60;
-}
-
-.gold {
-  background: #caa15a;
-}
-
-.cancelar {
-  background: #c0392b;
-  color: white;
-}
-
-.continuar {
-  background: #27ae60;
-  color: white;
-}
-
-
-.error-message {
-  color: #e74c3c;
-  margin-top: 15px;
-  font-size: 14px;
-  text-align: center;
+.btn-primary:disabled,
+.btn-outline:disabled {
+  opacity: 0.65;
+  cursor: wait;
 }

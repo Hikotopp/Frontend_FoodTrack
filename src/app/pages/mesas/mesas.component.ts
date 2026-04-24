@@ -1,86 +1,131 @@
-import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
-import { MesaService, Mesa } from '../../services/mesa.service';
+import { CommonModule, CurrencyPipe } from '@angular/common';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { Router, RouterLink } from '@angular/router';
+import { Observable, finalize, timeout } from 'rxjs';
 import { AuthService } from '../../services/auth.service';
+import { TableService, TableStatus, TableSummary } from '../../services/table.service';
 
 @Component({
   selector: 'app-mesas',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterLink, CurrencyPipe],
   templateUrl: './mesas.component.html',
-  styleUrls: ['./mesas.component.css']
+  styleUrls: ['./mesas.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MesasComponent implements OnInit {
-  mesas: Mesa[] = [];
+  tables: TableSummary[] = [];
+  isLoading = true;
+  isSaving = false;
+  errorMessage = '';
+  userName = '';
+  isAdmin = false;
+  private readonly requestTimeoutMs = 15000;
 
   constructor(
-    private mesaService: MesaService,
-    private authService: AuthService,
-    private router: Router
-  ) { }
+    private readonly tableService: TableService,
+    private readonly authService: AuthService,
+    private readonly router: Router,
+    private readonly changeDetector: ChangeDetectorRef
+  ) {}
 
   ngOnInit(): void {
-    this.cargarMesas();
+    this.userName = this.authService.getStoredUser()?.fullName ?? '';
+    this.isAdmin = this.authService.hasRole('ADMIN');
+    this.loadTables();
   }
 
-  cargarMesas(): void {
-    this.mesaService.listar().subscribe({
-      next: (data) => {
-        this.mesas = data;
+  loadTables(): void {
+    this.isLoading = true;
+    this.errorMessage = '';
+
+    this.tableService.listTables().pipe(
+      timeout(this.requestTimeoutMs),
+      finalize(() => {
+        this.isLoading = false;
+        this.changeDetector.markForCheck();
+      })
+    ).subscribe({
+      next: (tables) => {
+        this.tables = [...tables].sort((a, b) => a.tableNumber - b.tableNumber);
       },
-      error: (err) => {
-        console.error('Error al cargar mesas', err);
-        if (err.status === 401) {
-          this.authService.logout();
-          this.router.navigate(['/login']);
-        }
+      error: () => {
+        this.errorMessage = 'No se pudieron cargar las mesas. Intenta recargar.';
       }
     });
   }
 
-  agregarMesa(): void {
-    const nuevoNumero = this.mesas.length > 0 ? Math.max(...this.mesas.map(m => m.numero)) + 1 : 1;
-    const nuevaMesa: Mesa = {
-      numero: nuevoNumero,
-      capacidad: 4,
-      estado: 'LIBRE',
-      ubicacion: 'Sala principal'
-    };
-    this.mesaService.crear(nuevaMesa).subscribe({
-      next: () => this.cargarMesas(),
-      error: (err) => console.error(err)
-    });
-  }
-
-  quitarMesa(): void {
-    if (this.mesas.length > 0) {
-      const ultimaMesa = this.mesas[this.mesas.length - 1];
-      if (ultimaMesa.id) {
-        this.mesaService.eliminar(ultimaMesa.id).subscribe({
-          next: () => this.cargarMesas(),
-          error: (err) => console.error(err)
-        });
-      }
+  createTable(): void {
+    if (!this.isAdmin) {
+      return;
     }
+
+    const nextTableNumber = this.tables.length > 0
+      ? Math.max(...this.tables.map((table) => table.tableNumber)) + 1
+      : 1;
+
+    this.runAdminAction(
+      this.tableService.createTable(nextTableNumber),
+      'No se pudo crear la mesa.'
+    );
   }
 
-  cambiarEstado(mesa: Mesa): void {
-    let nuevoEstado: string;
-    if (mesa.estado === 'LIBRE') nuevoEstado = 'OCUPADA';
-    else if (mesa.estado === 'OCUPADA') nuevoEstado = 'RESERVADA';
-    else nuevoEstado = 'LIBRE';
-    
-    if (mesa.id) {
-      this.mesaService.cambiarEstado(mesa.id, nuevoEstado).subscribe({
-        next: () => this.cargarMesas(),
-        error: (err) => console.error(err)
-      });
+  deleteLastTable(): void {
+    if (!this.isAdmin) {
+      return;
     }
+
+    const lastTable = [...this.tables].sort((a, b) => b.tableNumber - a.tableNumber)[0];
+    if (!lastTable) {
+      return;
+    }
+
+    this.runAdminAction(
+      this.tableService.deleteTable(lastTable.id),
+      'No se pudo eliminar la mesa.'
+    );
   }
 
-  cerrarSesion(): void {
+  openTable(table: TableSummary): void {
+    this.router.navigate(['/mesas', table.id]);
+  }
+
+  logout(): void {
     this.authService.logout();
     this.router.navigate(['/']);
+  }
+
+  formatStatus(status: TableStatus): string {
+    const labels: Record<TableStatus, string> = {
+      AVAILABLE: 'Disponible',
+      OCCUPIED: 'Ocupada',
+      SERVING: 'Sirviendo',
+      WAITING_PAYMENT: 'Esperando pago',
+      CLEANING: 'Limpieza'
+    };
+
+    return labels[status];
+  }
+
+  trackByTableId(index: number, table: TableSummary): number {
+    return table.id;
+  }
+
+  private runAdminAction(request$: Observable<unknown>, message: string): void {
+    this.isSaving = true;
+    this.errorMessage = '';
+
+    request$.pipe(
+      timeout(this.requestTimeoutMs),
+      finalize(() => {
+        this.isSaving = false;
+        this.changeDetector.markForCheck();
+      })
+    ).subscribe({
+      next: () => this.loadTables(),
+      error: () => {
+        this.errorMessage = message;
+      }
+    });
   }
 }

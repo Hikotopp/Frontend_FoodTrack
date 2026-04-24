@@ -1,8 +1,7 @@
-/* CONTENEDOR PRINCIPAL */
 .home {
   width: 100vw;
   height: 100vh;
-  background-image: url('/assets/fondo.png'); /* tu imagen */
+  background-image: url('/assets/fondo.png');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -11,7 +10,6 @@
   overflow: hidden;
 }
 
-/* OVERLAY OSCURO */
 .home::before {
   content: "";
   position: absolute;
@@ -22,7 +20,6 @@
   left: 0;
 }
 
-/* NAVBAR */
 .navbar {
   display: flex;
   justify-content: space-between;
@@ -32,36 +29,11 @@
   z-index: 2;
 }
 
-.logo {
-  font-size: 24px;
-  font-weight: bold;
-}
-
-/* BOTONES */
 .buttons {
   display: flex;
   gap: 10px;
 }
 
-.btn-primary {
- background: transparent;
-  border: 1px solid #caa15a;
-  padding: 8px 16px;
-  color: #caa15a;
-  border-radius: 6px;
-  cursor: pointer;
-}
-
-.btn-outline {
-  background: transparent;
-  border: 1px solid #caa15a;
-  padding: 8px 16px;
-  color: #caa15a;
-  border-radius: 6px;
-  cursor: pointer;
-}
-
-/* HERO CENTRADO */
 .hero {
   position: absolute;
   top: 50%;
@@ -69,45 +41,44 @@
   transform: translate(-50%, -50%);
 }
 
-/* MARCO */
 .marco {
-  background: rgba(120, 0, 0, 0.20);
+  background: rgba(120, 0, 0, 0.2);
   padding: 60px 100px;
   text-align: center;
   border: 2px solid #caa15a;
   backdrop-filter: blur(8px);
   position: relative;
   z-index: 2;
-
-  /* Bordes hacia adentro */
   clip-path: polygon(
-    20px 0%, 
-    calc(100% - 20px) 0%, 
-    100% 20px, 
-    100% calc(100% - 20px), 
-    calc(100% - 20px) 100%, 
-    20px 100%, 
-    0% calc(100% - 20px), 
+    20px 0%,
+    calc(100% - 20px) 0%,
+    100% 20px,
+    100% calc(100% - 20px),
+    calc(100% - 20px) 100%,
+    20px 100%,
+    0% calc(100% - 20px),
     0% 20px
   );
 }
 
-/* TEXTOS */
 .bienvenido {
   font-family: "Great Vibes", cursive;
   font-size: 80px;
   font-weight: 400;
-  font-style: normal;
   color: #f5d7a1;
 }
 
 .titulo {
   font-family: "Playfair Display", serif;
-  font-optical-sizing: auto;
-  font-weight: 400; /* puedes usar 400, 500, 600, 700 */
-  font-style: normal;
   font-size: 80px;
   color: #f5d7a1;
   margin-top: 10px;
   letter-spacing: 4px;
+}
+
+.hero-copy {
+  margin-top: 18px;
+  max-width: 560px;
+  color: #dfcfb5;
+  line-height: 1.6;
 }

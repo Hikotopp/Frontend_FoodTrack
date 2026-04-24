@@ -1,23 +1,37 @@
-<div class="home">
-  <div class="navbar">
-    <h1 class="foodtrack-title">FoodTrack</h1>
-    <div class="buttons">
-      <button class="btn-outline">Gestión de mesas</button>
-      <button class="btn-outline">Control de pagos</button>
-      <button class="btn-outline" (click)="cerrarSesion()">Cerrar sesión</button>
+<section class="tables-shell">
+  <header class="tables-header">
+    <div>
+      <p class="eyebrow">FoodTrack control center</p>
+      <h1>Panel de mesas</h1>
+      <p class="intro">Entra a cada mesa para cambiar estados, gestionar el pedido y ver el total respaldado por el backend.</p>
     </div>
-  </div>
-  <h2 class="titulo-central">GESTIÓN DE MESAS</h2>
-  <div class="contenedor-mesas">
-    <div class="grid-mesas">
-      <div class="mesa" *ngFor="let mesa of mesas" (click)="cambiarEstado(mesa)">
-        <img src="assets/mesa.png" alt="mesa">
-        <span>#{{ mesa.numero }} - {{ mesa.estado }}</span>
+
+    <div class="header-actions">
+      <div class="session-card">
+        <span>{{ userName || 'Sesion activa' }}</span>
+        <small>{{ isAdmin ? 'Administrador' : 'Empleado' }}</small>
       </div>
+      <button class="btn-outline" (click)="logout()">Cerrar sesion</button>
     </div>
+  </header>
+
+  <p class="feedback error" *ngIf="errorMessage">{{ errorMessage }}</p>
+
+  <div class="toolbar">
+    <button class="btn-outline" *ngIf="isAdmin" [disabled]="isSaving" (click)="createTable()">Agregar mesa</button>
+    <button class="btn-outline" *ngIf="isAdmin" [disabled]="isSaving || tables.length === 0" (click)="deleteLastTable()">Eliminar ultima</button>
   </div>
-  <div class="acciones">
-    <button class="btn-outline" (click)="agregarMesa()">Agregar</button>
-    <button class="btn-outline" (click)="quitarMesa()">Quitar</button>
+
+  <div class="empty-state panel" *ngIf="isLoading">Cargando mesas desde el backend...</div>
+  <div class="empty-state panel" *ngIf="!isLoading && tables.length === 0">Todavia no hay mesas registradas.</div>
+
+  <div class="table-grid" *ngIf="!isLoading && tables.length > 0">
+    <article class="table-card" *ngFor="let table of tables; trackBy: trackByTableId" (click)="openTable(table)">
+      <img src="assets/mesa.png" alt="Mesa">
+      <h2>Mesa {{ table.tableNumber }}</h2>
+      <span class="status">{{ formatStatus(table.status) }}</span>
+      <strong>{{ table.total | currency:'COP':'symbol':'1.0-0' }}</strong>
+      <small>{{ table.itemCount }} items en consumo</small>
+    </article>
   </div>
-</div>
+</section>

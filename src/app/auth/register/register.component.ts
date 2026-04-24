@@ -1,40 +1,50 @@
-import { Component } from '@angular/core';
-import { Router } from '@angular/router';
-import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { Component } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [FormsModule, CommonModule],
+  imports: [CommonModule, FormsModule, RouterLink],
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.css']
 })
 export class RegisterComponent {
-  usuario = {
+  form = {
+    fullName: '',
     email: '',
-    password: '',
-    nombre: '',
-    rol: 'EMPLEADO'
+    password: ''
   };
-  errorMessage: string = '';
+  isSubmitting = false;
+  errorMessage = '';
 
-  constructor(private authService: AuthService, private router: Router) { }
+  constructor(
+    private readonly authService: AuthService,
+    private readonly router: Router
+  ) {}
 
-  onSubmit() {
-    this.authService.register(this.usuario).subscribe({
+  submit(): void {
+    this.errorMessage = '';
+
+    if (!this.form.fullName.trim() || !this.form.email.trim() || !this.form.password.trim()) {
+      this.errorMessage = 'Completa todos los campos.';
+      return;
+    }
+
+    this.isSubmitting = true;
+    this.authService.register(this.form).subscribe({
       next: () => {
         this.router.navigate(['/login']);
       },
-      error: (err) => {
-        this.errorMessage = 'Error al registrar. Intente de nuevo.';
-        console.error(err);
+      error: () => {
+        this.isSubmitting = false;
+        this.errorMessage = 'No se pudo crear la cuenta.';
+      },
+      complete: () => {
+        this.isSubmitting = false;
       }
     });
-  }
-
-  cancelar() {
-    this.router.navigate(['/']);
   }
 }

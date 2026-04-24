@@ -1,0 +1,126 @@
+<section class="detail-shell" *ngIf="isLoading">
+  <div class="panel loading-panel">Cargando detalle de la mesa...</div>
+</section>
+
+<section class="detail-shell" *ngIf="!isLoading && dashboard as view">
+  <header class="detail-header">
+    <div>
+      <button class="btn-outline back-link" (click)="goBack()">Volver a mesas</button>
+      <h1>Mesa {{ view.table.tableNumber }}</h1>
+      <p>Gestiona el estado, el pedido y el total desde una sola pantalla.</p>
+    </div>
+
+    <div class="header-actions">
+      <div class="session-chip">
+        <span>{{ userName || 'Equipo FoodTrack' }}</span>
+        <small>{{ userRole || 'Sesion activa' }}</small>
+      </div>
+      <button class="btn-outline" (click)="logout()">Cerrar sesion</button>
+    </div>
+  </header>
+
+  <p class="feedback error" *ngIf="errorMessage">{{ errorMessage }}</p>
+
+  <div class="detail-grid">
+    <article class="panel summary-panel">
+      <div class="panel-title">
+        <h2>Resumen de la mesa</h2>
+        <span class="status-pill">{{ formatStatus(view.table.status) }}</span>
+      </div>
+
+      <div class="summary-metrics">
+        <div>
+          <span class="metric-label">Estado actual</span>
+          <select [(ngModel)]="statusDraft">
+            <option *ngFor="let status of statusOptions" [ngValue]="status">
+              {{ formatStatus(status) }}
+            </option>
+          </select>
+        </div>
+
+        <div>
+          <span class="metric-label">Total consumido</span>
+          <strong>{{ (view.currentOrder?.total ?? 0) | currency:'COP':'symbol':'1.0-0' }}</strong>
+        </div>
+
+        <div>
+          <span class="metric-label">Items en cuenta</span>
+          <strong>{{ view.currentOrder?.lines?.length ?? 0 }}</strong>
+        </div>
+      </div>
+
+      <div class="summary-actions">
+        <button class="btn-primary" [disabled]="isSaving" (click)="updateStatus()">Guardar estado</button>
+        <button class="btn-outline" [disabled]="isSaving || !view.currentOrder" (click)="closeOrder()">Cerrar cuenta</button>
+      </div>
+    </article>
+
+    <article class="panel order-panel">
+      <div class="panel-title">
+        <h2>Pedido actual</h2>
+        <span *ngIf="view.currentOrder; else noOrder">{{ view.currentOrder.status }}</span>
+      </div>
+
+      <ng-template #noOrder>
+        <span>Sin pedido abierto</span>
+      </ng-template>
+
+      <div class="order-lines" *ngIf="orderLines.length > 0; else emptyOrder">
+        <div class="order-line" *ngFor="let line of orderLines; trackBy: trackByOrderLineId">
+          <div class="line-copy">
+            <strong>{{ line.itemName }}</strong>
+            <small>{{ line.subtotal | currency:'COP':'symbol':'1.0-0' }}</small>
+          </div>
+
+          <div class="line-actions">
+            <input type="number" min="1" [(ngModel)]="lineQuantities[line.id]" />
+            <button class="btn-primary small" [disabled]="isSaving" (click)="updateLine(line.id)">Actualizar</button>
+            <button class="btn-outline small" [disabled]="isSaving" (click)="removeLine(line.id)">Quitar</button>
+          </div>
+        </div>
+      </div>
+
+      <ng-template #emptyOrder>
+        <p class="empty-copy">Todavia no hay productos agregados. Usa el menu gourmet para empezar el pedido.</p>
+      </ng-template>
+    </article>
+  </div>
+
+  <section class="panel menu-panel">
+    <div class="panel-title">
+      <h2>Menu gourmet</h2>
+      <span>Todo el consumo se calcula en backend</span>
+    </div>
+
+    <div class="category-section" *ngFor="let group of menuGroups; trackBy: trackByGroupCategory">
+      <h3>{{ group.label }}</h3>
+
+      <div class="menu-grid">
+        <article class="menu-card" *ngFor="let item of group.items; trackBy: trackByMenuItemId">
+          <div class="menu-copy">
+            <strong>{{ item.name }}</strong>
+            <p>{{ item.description }}</p>
+          </div>
+
+          <div class="menu-meta">
+            <span>{{ item.price | currency:'COP':'symbol':'1.0-0' }}</span>
+            <div class="menu-actions">
+              <input type="number" min="1" [(ngModel)]="menuQuantities[item.id]" />
+              <button class="btn-primary small" [disabled]="isSaving" (click)="addItem(item.id)">Agregar</button>
+            </div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+</section>
+
+<section class="detail-shell" *ngIf="!isLoading && !dashboard">
+  <div class="panel loading-panel">
+    <p>{{ errorMessage || 'No fue posible cargar esta mesa.' }}</p>
+    <div class="summary-actions">
+      <button class="btn-outline" (click)="goBack()">Volver a mesas</button>
+      <button class="btn-primary" (click)="retryLoad()">Reintentar</button>
+    </div>
+  </div>
+</section>

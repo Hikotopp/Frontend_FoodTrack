@@ -1,120 +1,142 @@
-.home {
-  width: 100vw;
-  height: 100vh;
-  background-image: url('/assets/fondo.png');
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  position: relative;
-  overflow: hidden;
-}
-@keyframes aparecer {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-/* OVERLAY OSCURO */
-.home::before {
-  content: "";
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.6);
-  top: 0;
-  left: 0;
+.tables-shell {
+  min-height: 100vh;
+  padding: 32px;
+  background:
+    radial-gradient(circle at top right, rgba(202, 161, 90, 0.18), transparent 24%),
+    linear-gradient(140deg, #120b0a 0%, #311613 58%, #090607 100%);
+  color: #f7f0df;
 }
 
-/* NAVBAR */
-.navbar {
+.tables-header {
   display: flex;
   justify-content: space-between;
+  gap: 24px;
+  align-items: flex-start;
+  margin-bottom: 24px;
+}
+
+.eyebrow {
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: #c8baa2;
+  font-size: 0.78rem;
+}
+
+.tables-header h1 {
+  margin: 10px 0 12px;
+  font-family: "Playfair Display", serif;
+  font-size: clamp(2.2rem, 5vw, 4rem);
+}
+
+.intro {
+  max-width: 620px;
+  color: #dfcfb5;
+  line-height: 1.6;
+}
+
+.header-actions {
+  display: flex;
   align-items: center;
-  padding: 25px 50px;
-  position: relative;
-  z-index: 2;
+  gap: 12px;
 }
 
-/* BOTONES SUPERIORES */
-.buttons {
-  display: flex;
-  gap: 10px;
+.session-card {
+  padding: 12px 16px;
+  border: 1px solid rgba(202, 161, 90, 0.45);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.05);
 }
 
-.btn-outline {
-  background: transparent;
-  border: 1px solid #caa15a;
-  padding: 8px 16px;
-  color: #caa15a;
-  border-radius: 6px;
-  cursor: pointer;
-}
-
-/* TÍTULO CENTRAL */
-.titulo-central {
-  text-align: center;
-  color: #f5d7a1;
-  font-size: 40px;
-  margin-top: 10px;
-  position: relative;
-  z-index: 2;
-}
-
-/* CONTENEDOR ROJO */
-.contenedor-mesas {
-  background: rgba(120, 0, 0, 0.25);
-  border: 2px solid #caa15a;
-  backdrop-filter: blur(8px);
-  margin: 40px auto;
-  padding: 30px;
-  width: 70%;
-  max-height: 400px;
-  overflow-y: auto;
-  position: relative;
-  z-index: 2;
-  animation: aparecer 0.6s ease;
-}
-
-/* GRID DE MESAS */
-.grid-mesas {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 20px; /* antes 30px */
-  justify-items: center;
-}
-
-/* MESA */
-.mesa {
-  text-align: center;
-  cursor: pointer;
-  transition: transform 0.2s;
-  animation: aparecer 0.5s ease;
-}
-
-.mesa:hover {
-  transform: scale(1.1);
-}
-
-.mesa img {
-  width: 120px;
-}
-
-.mesa span {
+.session-card span,
+.session-card small {
   display: block;
-  color: #f5d7a1;
-  margin-top: 5px;
 }
 
-.acciones {
-  position: absolute;
-  right: 60px;
-  bottom: 40px; /* 🔥 en vez de top */
+.session-card small {
+  color: #c8baa2;
+}
+
+.toolbar {
   display: flex;
-  flex-direction: column;
-  gap: 10px;
-  z-index: 3;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.table-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 18px;
+}
+
+.table-card,
+.panel {
+  border: 1px solid rgba(202, 161, 90, 0.45);
+  border-radius: 24px;
+  background:
+    linear-gradient(180deg, rgba(202, 161, 90, 0.08), rgba(255, 255, 255, 0.03)),
+    rgba(32, 20, 18, 0.78);
+  backdrop-filter: blur(18px);
+  box-shadow: 0 18px 42px rgba(0, 0, 0, 0.35);
+}
+
+.table-card {
+  padding: 22px;
+  cursor: pointer;
+  transition: transform 0.2s ease, border-color 0.2s ease;
+  text-align: center;
+}
+
+.table-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(202, 161, 90, 0.8);
+}
+
+.table-card img {
+  width: 112px;
+  margin-bottom: 12px;
+}
+
+.table-card h2 {
+  font-family: "Playfair Display", serif;
+  font-size: 1.7rem;
+  margin-bottom: 8px;
+}
+
+.status,
+.table-card small {
+  display: block;
+  color: #dfcfb5;
+}
+
+.table-card strong {
+  display: block;
+  margin: 10px 0 6px;
+  color: #f5d48f;
+  font-size: 1.25rem;
+}
+
+.empty-state {
+  padding: 28px;
+  color: #dfcfb5;
+}
+
+.feedback.error {
+  margin-bottom: 16px;
+  color: #ffb7b7;
+}
+
+@media (max-width: 880px) {
+  .tables-shell {
+    padding: 20px;
+  }
+
+  .tables-header,
+  .header-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .toolbar {
+    flex-wrap: wrap;
+  }
 }

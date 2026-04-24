@@ -2,22 +2,43 @@
   <div class="top-bar">
     <h1 class="foodtrack-title">FoodTrack</h1>
   </div>
+
   <div class="center">
     <div class="marco-login">
-      <h1 class="titulo">INICIO DE SESIÓN</h1>
-      <div class="form-group">
-        <label>CORREO</label>
-        <input type="email" [(ngModel)]="email" />
-      </div>
-      <div class="form-group">
-        <label>CONTRASEÑA</label>
-        <input type="password" [(ngModel)]="password" />
-      </div>
-      <div class="acciones">
-        <button class="btn-outline" (click)="cancelar()">Cancelar</button>
-        <button class="btn-primary" (click)="onSubmit()">Continuar</button>
-      </div>
-      <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
+      <h1 class="titulo">INICIO DE SESION</h1>
+
+      <form (ngSubmit)="submit()">
+        <div class="form-group">
+          <label for="email">CORREO</label>
+          <input
+            id="email"
+            name="email"
+            type="email"
+            autocomplete="email"
+            [(ngModel)]="credentials.email"
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="password">CONTRASENA</label>
+          <input
+            id="password"
+            name="password"
+            type="password"
+            autocomplete="current-password"
+            [(ngModel)]="credentials.password"
+          />
+        </div>
+
+        <p *ngIf="errorMessage" class="feedback error">{{ errorMessage }}</p>
+
+        <div class="acciones">
+          <button type="button" class="btn-outline" routerLink="/">Cancelar</button>
+          <button type="submit" class="btn-primary" [disabled]="isSubmitting">
+            {{ isSubmitting ? 'Entrando...' : 'Continuar' }}
+          </button>
+        </div>
+      </form>
     </div>
   </div>
 </div>
