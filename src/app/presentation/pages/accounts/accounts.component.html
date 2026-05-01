@@ -1,0 +1,41 @@
+<section class="accounts-shell">
+  <header class="accounts-header">
+    <div>
+      <button class="btn-outline back-link" routerLink="/mesas">Volver a mesas</button>
+      <p class="eyebrow">FoodTrack control center</p>
+      <h1>Cuentas de equipo</h1>
+      <p class="intro">Administra el tipo de cuenta desde permisos respaldados por backend.</p>
+    </div>
+
+    <div class="header-actions">
+      <button class="btn-outline" routerLink="/historial">Historial</button>
+      <div class="session-card">
+        <span>{{ userName || 'Administrador' }}</span>
+        <small>Administrador</small>
+      </div>
+      <button class="btn-outline" (click)="logout()">Cerrar sesion</button>
+    </div>
+  </header>
+
+  <p class="feedback error" *ngIf="errorMessage">{{ errorMessage }}</p>
+
+  <div class="empty-state panel" *ngIf="isLoading">Cargando cuentas desde el backend...</div>
+
+  <div class="accounts-table panel" *ngIf="!isLoading">
+    <div class="table-row table-head">
+      <span>Nombre</span>
+      <span>Correo</span>
+      <span>Tipo de cuenta</span>
+      <span>Accion</span>
+    </div>
+
+    <div class="table-row" *ngFor="let user of users; trackBy: trackByUserId">
+      <strong>{{ user.fullName }}</strong>
+      <span>{{ user.email }}</span>
+      <select [(ngModel)]="roleDrafts[user.id]">
+        <option *ngFor="let role of roleOptions" [ngValue]="role">{{ formatRole(role) }}</option>
+      </select>
+      <button class="btn-primary" [disabled]="isSaving" (click)="updateRole(user)">Guardar</button>
+    </div>
+  </div>
+</section>

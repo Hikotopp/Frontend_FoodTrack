@@ -1,9 +1,12 @@
-FROM nginx:alpine
+FROM node:20-alpine AS build
+WORKDIR /app
 
-# Copiar la configuración personalizada de nginx
+COPY package*.json ./
+RUN npm ci
+
+COPY . .
+RUN npm run build
+
+FROM nginx:1.27-alpine
 COPY nginx.conf /etc/nginx/conf.d/default.conf
-
-# Copiar los archivos compilados de Angular
-COPY ./dist/foodtrack/browser/. /usr/share/nginx/html/
-
-EXPOSE 80
+COPY --from=build /app/dist/foodtrack/browser /usr/share/nginx/html
