@@ -30,7 +30,16 @@ export class SessionService {
 
   getStoredUser(): StoredUser | null {
     const raw = localStorage.getItem(this.USER_KEY);
-    return raw ? JSON.parse(raw) : null;
+    if (!raw) {
+      return null;
+    }
+
+    try {
+      return JSON.parse(raw);
+    } catch {
+      this.logout();
+      return null;
+    }
   }
 
   getToken(): string | null {
@@ -38,7 +47,12 @@ export class SessionService {
   }
 
   isAuthenticated(): boolean {
-    return this.getToken() !== null;
+    const token = this.getToken();
+    if (!token || this.isTokenExpired(token)) {
+      this.logout();
+      return false;
+    }
+    return true;
   }
 
   hasRole(role: string): boolean {
@@ -48,5 +62,28 @@ export class SessionService {
   logout(): void {
     localStorage.removeItem(this.TOKEN_KEY);
     localStorage.removeItem(this.USER_KEY);
+  }
+
+  private isTokenExpired(token: string): boolean {
+    const payload = this.decodePayload(token);
+    if (!payload?.exp) {
+      return true;
+    }
+    return payload.exp * 1000 <= Date.now();
+  }
+
+  private decodePayload(token: string): { exp?: number } | null {
+    const [, encodedPayload] = token.split('.');
+    if (!encodedPayload) {
+      return null;
+    }
+
+    try {
+      const base64 = encodedPayload.replace(/-/g, '+').replace(/_/g, '/');
+      const padded = base64.padEnd(base64.length + (4 - base64.length % 4) % 4, '=');
+      return JSON.parse(atob(padded));
+    } catch {
+      return null;
+    }
   }
 }

@@ -10,10 +10,10 @@
       <button class="btn-outline" routerLink="/historial">Historial</button>
       <button class="btn-outline" *ngIf="isAdmin" routerLink="/cuentas">Cuentas</button>
       <div class="session-card">
-        <span>{{ userName || 'Sesion activa' }}</span>
+        <span>{{ userName || 'Sesión activa' }}</span>
         <small>{{ isAdmin ? 'Administrador' : 'Empleado' }}</small>
       </div>
-      <button class="btn-outline" (click)="logout()">Cerrar sesion</button>
+      <button class="btn-outline" (click)="logout()">Cerrar sesión</button>
     </div>
   </header>
 
