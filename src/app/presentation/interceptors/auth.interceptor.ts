@@ -9,7 +9,8 @@ export const authInterceptor: HttpInterceptorFn = (request, next) => {
   const router = inject(Router);
   const token = session.getToken();
 
-  const isProtected = request.url.includes('/api/') && !request.url.includes('/api/auth/');
+  const isAuthPublicEndpoint = request.url.endsWith('/api/auth/login') || request.url.endsWith('/api/auth/register');
+  const isProtected = request.url.includes('/api/') && !isAuthPublicEndpoint;
 
   let authReq = request;
   if (isProtected && token) {

@@ -7,6 +7,14 @@ describe('SessionService', () => {
   let service: SessionService;
   let store: { [key: string]: string } = {};
 
+  const createToken = (expirationInSeconds: number): string => {
+    const payload = btoa(JSON.stringify({ exp: expirationInSeconds }))
+      .replace(/\+/g, '-')
+      .replace(/\//g, '_')
+      .replace(/=+$/, '');
+    return `header.${payload}.signature`;
+  };
+
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
@@ -136,15 +144,29 @@ describe('SessionService', () => {
       expect(isAuth).toBeFalsy();
     });
 
-    it('should return true when token is stored', () => {
+    it('should return true when a non-expired token is stored', () => {
       // Arrange
-      store['token'] = 'valid-token';
+      store['token'] = createToken(Math.floor(Date.now() / 1000) + 3600);
 
       // Act
       const isAuth = service.isAuthenticated();
 
       // Assert
       expect(isAuth).toBeTruthy();
+    });
+
+    it('should clear the session when token is expired', () => {
+      // Arrange
+      store['token'] = createToken(Math.floor(Date.now() / 1000) - 60);
+      store['foodtrack-user'] = JSON.stringify({ fullName: 'User', email: 'user@example.com', role: 'EMPLOYEE' });
+
+      // Act
+      const isAuth = service.isAuthenticated();
+
+      // Assert
+      expect(isAuth).toBeFalsy();
+      expect(localStorage.removeItem).toHaveBeenCalledWith('token');
+      expect(localStorage.removeItem).toHaveBeenCalledWith('foodtrack-user');
     });
   });
 
