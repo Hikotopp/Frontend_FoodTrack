@@ -5,13 +5,13 @@ import { Pedido } from '../../domain/models/pedido.model';
 import { PedidoRepository } from '../../domain/ports/out/pedido.repository';
 import { environment } from '../../../environments/environment';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable({ providedIn: 'root' })
 export class PedidoHttpAdapter implements PedidoRepository {
-  private readonly apiUrl = `${environment.apiUrl}/pedidos`;
+  private readonly apiUrl: string;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {
+    this.apiUrl = `${environment.apiUrl}/pedidos`;
+  }
 
   listar(): Observable<Pedido[]> {
     return this.http.get<Pedido[]>(this.apiUrl);

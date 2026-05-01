@@ -1,23 +1,25 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { AuthRepository, LoginResponse, RegisterData } from '../domain/ports/out/auth.repository';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable({ providedIn: 'root' })
 export class AuthService implements AuthRepository {
-  private apiUrl = environment.apiUrl;
-
-  constructor(private http: HttpClient) { }
+  private http = inject(HttpClient);
 
   login(usuario: string, contrasena: string): Observable<LoginResponse> {
-    return this.http.post<LoginResponse>(`${this.apiUrl}/auth/login`, { usuario, contrasena });
+    // TODO: Implement login
+    return of({
+      token: 'dummy-token',
+      role: 'EMPLOYEE',
+      fullName: 'Test User',
+      email: usuario
+    } as LoginResponse);
   }
 
   register(userData: RegisterData): Observable<any> {
-    return this.http.post(`${this.apiUrl}/usuarios`, userData);
+    return of(null);
   }
 
   guardarToken(token: string): void {
@@ -32,7 +34,16 @@ export class AuthService implements AuthRepository {
     return this.obtenerToken() !== null;
   }
 
+  isAuthenticated(): boolean {
+    return this.estaAutenticado();
+  }
+
+  getUserRole(): string | null {
+    return localStorage.getItem('rol') || 'empleado';
+  }
+
   logout(): void {
     localStorage.removeItem('token');
+    localStorage.removeItem('rol');
   }
 }

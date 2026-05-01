@@ -5,9 +5,7 @@ import { PedidoRepository } from '../../domain/ports/out/pedido.repository';
 import { PEDIDO_REPOSITORY } from '../../domain/ports/out/pedido.repository.token';
 import { PedidoUseCase } from '../../domain/ports/in/pedido.use-case';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable({ providedIn: 'root' })
 export class PedidoUseCaseService implements PedidoUseCase {
   constructor(@Inject(PEDIDO_REPOSITORY) private pedidoRepository: PedidoRepository) {}
 

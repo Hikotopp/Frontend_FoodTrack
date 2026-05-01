@@ -2,9 +2,9 @@ import { Observable } from 'rxjs';
 
 export interface LoginResponse {
   token: string;
-  tipoUsuario: string;
-  nombre: string;
-  usuario: string;
+  role: string;
+  fullName: string;
+  email: string;
 }
 
 export interface RegisterData {
