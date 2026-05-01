@@ -17,6 +17,12 @@ import { AccountRole, UserAccount, UserAdminService } from '../../../infrastruct
 export class AccountsComponent extends BaseDataComponent implements OnInit {
   users: UserAccount[] = [];
   roleDrafts: Record<number, AccountRole> = {};
+  newUser = {
+    fullName: '',
+    email: '',
+    password: '',
+    role: 'EMPLOYEE' as AccountRole
+  };
   readonly roleOptions: AccountRole[] = ['ADMIN', 'EMPLOYEE'];
 
   constructor(
@@ -60,6 +66,33 @@ export class AccountsComponent extends BaseDataComponent implements OnInit {
         this.roleDrafts[updated.id] = updated.role;
       },
       'No se pudo actualizar el tipo de cuenta.'
+    );
+  }
+
+  createUser(): void {
+    if (!this.newUser.fullName.trim() || !this.newUser.email.trim() || !this.newUser.password.trim()) {
+      this.errorMessage = 'Completa nombre, correo y contraseña.';
+      return;
+    }
+
+    this.saveData(
+      this.userAdminService.createUser({
+        fullName: this.newUser.fullName,
+        email: this.newUser.email,
+        password: this.newUser.password,
+        role: this.newUser.role
+      }),
+      (created) => {
+        this.users = [...this.users, created].sort((a, b) => a.fullName.localeCompare(b.fullName));
+        this.roleDrafts[created.id] = created.role;
+        this.newUser = {
+          fullName: '',
+          email: '',
+          password: '',
+          role: 'EMPLOYEE'
+        };
+      },
+      'No se pudo crear la cuenta.'
     );
   }
 

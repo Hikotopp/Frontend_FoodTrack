@@ -19,6 +19,36 @@
 
   <p class="feedback error" *ngIf="errorMessage">{{ errorMessage }}</p>
 
+  <form class="panel account-form" (ngSubmit)="createUser()">
+    <input
+      name="fullName"
+      [(ngModel)]="newUser.fullName"
+      placeholder="Nombre"
+      autocomplete="name"
+      required
+    />
+    <input
+      name="email"
+      type="email"
+      [(ngModel)]="newUser.email"
+      placeholder="Correo"
+      autocomplete="email"
+      required
+    />
+    <input
+      name="password"
+      type="password"
+      [(ngModel)]="newUser.password"
+      placeholder="Contraseña temporal"
+      autocomplete="new-password"
+      required
+    />
+    <select name="role" [(ngModel)]="newUser.role">
+      <option *ngFor="let role of roleOptions" [ngValue]="role">{{ formatRole(role) }}</option>
+    </select>
+    <button class="btn-primary" type="submit" [disabled]="isSaving">Crear cuenta</button>
+  </form>
+
   <div class="empty-state panel" *ngIf="isLoading">Cargando cuentas desde el backend...</div>
 
   <div class="accounts-table panel" *ngIf="!isLoading">
