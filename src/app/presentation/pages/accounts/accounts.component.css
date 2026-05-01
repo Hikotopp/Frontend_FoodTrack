@@ -73,6 +73,23 @@ h1 {
   overflow: hidden;
 }
 
+.account-form {
+  display: grid;
+  grid-template-columns: 1fr 1.1fr 1fr 180px 140px;
+  gap: 12px;
+  margin-bottom: 18px;
+  padding: 16px;
+}
+
+.account-form input {
+  min-width: 0;
+  border: 1px solid rgba(202, 161, 90, 0.45);
+  border-radius: 10px;
+  background: #1f1311;
+  color: #f7f0df;
+  padding: 10px 12px;
+}
+
 .table-row {
   display: grid;
   grid-template-columns: 1.2fr 1.4fr 180px 120px;
@@ -113,6 +130,7 @@ select {
 
   .accounts-header,
   .header-actions,
+  .account-form,
   .table-row {
     display: flex;
     flex-direction: column;

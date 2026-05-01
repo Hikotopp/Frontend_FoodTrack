@@ -12,6 +12,13 @@ export interface UserAccount {
   role: AccountRole;
 }
 
+export interface CreateUserPayload {
+  fullName: string;
+  email: string;
+  password: string;
+  role: AccountRole;
+}
+
 @Injectable({ providedIn: 'root' })
 export class UserAdminService {
   private readonly apiUrl = `${environment.apiUrl}/users`;
@@ -20,6 +27,10 @@ export class UserAdminService {
 
   listUsers(): Observable<UserAccount[]> {
     return this.http.get<UserAccount[]>(this.apiUrl);
+  }
+
+  createUser(payload: CreateUserPayload): Observable<UserAccount> {
+    return this.http.post<UserAccount>(this.apiUrl, payload);
   }
 
   updateRole(userId: number, role: AccountRole): Observable<UserAccount> {
