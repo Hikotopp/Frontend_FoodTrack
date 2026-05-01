@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormsModule, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { BaseDataComponent } from '../../../shared/base-data.component';
 import { SessionService } from '../../../infrastructure/services/session.service';
@@ -9,7 +9,7 @@ import { AccountRole, UserAccount, UserAdminService } from '../../../infrastruct
 @Component({
   selector: 'app-accounts',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, RouterLink],
   templateUrl: './accounts.component.html',
   styleUrls: ['./accounts.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -17,18 +17,20 @@ import { AccountRole, UserAccount, UserAdminService } from '../../../infrastruct
 export class AccountsComponent extends BaseDataComponent implements OnInit {
   users: UserAccount[] = [];
   roleDrafts: Record<number, AccountRole> = {};
-  newUser = {
-    fullName: '',
-    email: '',
-    password: '',
-    role: 'EMPLOYEE' as AccountRole
-  };
+  private readonly passwordPattern = /^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]).{8,64}$/;
   readonly roleOptions: AccountRole[] = ['ADMIN', 'EMPLOYEE'];
+  readonly accountForm = this.formBuilder.nonNullable.group({
+    fullName: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(120)]],
+    email: ['', [Validators.required, Validators.email]],
+    password: ['', [Validators.required, this.passwordStrengthValidator.bind(this)]],
+    role: ['EMPLOYEE' as AccountRole, [Validators.required]]
+  });
 
   constructor(
     private userAdminService: UserAdminService,
     private sessionService: SessionService,
     private router: Router,
+    private formBuilder: FormBuilder,
     cdr: ChangeDetectorRef
   ) {
     super(cdr);
@@ -70,27 +72,27 @@ export class AccountsComponent extends BaseDataComponent implements OnInit {
   }
 
   createUser(): void {
-    if (!this.newUser.fullName.trim() || !this.newUser.email.trim() || !this.newUser.password.trim()) {
-      this.errorMessage = 'Completa nombre, correo y contraseña.';
+    if (this.accountForm.invalid) {
+      this.accountForm.markAllAsTouched();
+      this.errorMessage = this.accountForm.controls.password.invalid
+        ? 'La contrasena debe tener entre 8 y 64 caracteres, una mayuscula, un numero y un caracter especial.'
+        : 'Completa nombre, correo y contrasena con datos validos.';
       return;
     }
 
+    const { fullName, email, password, role } = this.accountForm.getRawValue();
+
     this.saveData(
       this.userAdminService.createUser({
-        fullName: this.newUser.fullName,
-        email: this.newUser.email,
-        password: this.newUser.password,
-        role: this.newUser.role
+        fullName: fullName.trim(),
+        email: email.trim(),
+        password: password.trim(),
+        role
       }),
       (created) => {
         this.users = [...this.users, created].sort((a, b) => a.fullName.localeCompare(b.fullName));
         this.roleDrafts[created.id] = created.role;
-        this.newUser = {
-          fullName: '',
-          email: '',
-          password: '',
-          role: 'EMPLOYEE'
-        };
+        this.accountForm.reset({ fullName: '', email: '', password: '', role: 'EMPLOYEE' });
       },
       'No se pudo crear la cuenta.'
     );
@@ -107,5 +109,10 @@ export class AccountsComponent extends BaseDataComponent implements OnInit {
 
   trackByUserId(_: number, user: UserAccount): number {
     return user.id;
+  }
+
+  private passwordStrengthValidator(control: AbstractControl<string>): ValidationErrors | null {
+    const value = control.value.trim();
+    return this.passwordPattern.test(value) ? null : { passwordStrength: true };
   }
 }
