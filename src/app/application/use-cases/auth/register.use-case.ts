@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { AuthPort } from '../../../domain/ports/auth.port';
+import { AuthHttpAdapter } from '../../../infrastructure/adapters/http/auth-http.adapter';
 import { AuthResponse } from '../../../domain/entities/user.entity';
 
 @Injectable({ providedIn: 'root' })
 export class RegisterUseCase {
-  constructor(private authPort: AuthPort) {}
+  constructor(private authHttp: AuthHttpAdapter) {}
+
   execute(fullName: string, email: string, password: string): Observable<AuthResponse> {
-    return this.authPort.register(fullName, email, password);
+    return this.authHttp.register(fullName, email, password);
   }
 }

@@ -1,0 +1,55 @@
+<section class="history-shell">
+  <header class="history-header">
+    <div>
+      <button class="btn-outline back-link" routerLink="/mesas">Volver a mesas</button>
+      <p class="eyebrow">FoodTrack control center</p>
+      <h1>Historial de ventas</h1>
+      <p class="intro">Consulta las cuentas cerradas y anuladas. Los cambios administrativos se guardan en backend.</p>
+    </div>
+
+    <div class="header-actions">
+      <button class="btn-outline" *ngIf="isAdmin" routerLink="/cuentas">Cuentas</button>
+      <div class="session-card">
+        <span>{{ userName || 'Sesion activa' }}</span>
+        <small>{{ isAdmin ? 'Administrador' : 'Empleado' }}</small>
+      </div>
+      <button class="btn-outline" (click)="logout()">Cerrar sesion</button>
+    </div>
+  </header>
+
+  <p class="feedback error" *ngIf="errorMessage">{{ errorMessage }}</p>
+
+  <div class="empty-state panel" *ngIf="isLoading">Cargando historial desde el backend...</div>
+  <div class="empty-state panel" *ngIf="!isLoading && sales.length === 0">Todavia no hay ventas cerradas.</div>
+
+  <div class="history-list" *ngIf="!isLoading && sales.length > 0">
+    <article class="panel sale-card" *ngFor="let sale of sales; trackBy: trackBySaleId">
+      <div class="sale-heading">
+        <div>
+          <h2>Venta #{{ sale.id }}</h2>
+          <p>Mesa {{ sale.tableNumber || sale.tableId }} · {{ sale.createdByName }}</p>
+        </div>
+        <strong>{{ sale.total | currency:'COP':'symbol':'1.0-0' }}</strong>
+      </div>
+
+      <div class="sale-meta">
+        <span>{{ sale.createdAt | date:'medium' }}</span>
+        <span>{{ formatStatus(sale.status) }}</span>
+      </div>
+
+      <div class="line-list">
+        <div class="line-row" *ngFor="let line of sale.lines">
+          <span>{{ line.quantity }} x {{ line.itemName }}</span>
+          <strong>{{ line.subtotal | currency:'COP':'symbol':'1.0-0' }}</strong>
+        </div>
+      </div>
+
+      <div class="admin-actions" *ngIf="isAdmin">
+        <select [(ngModel)]="statusDrafts[sale.id]">
+          <option *ngFor="let status of statusOptions" [ngValue]="status">{{ formatStatus(status) }}</option>
+        </select>
+        <button class="btn-primary" [disabled]="isSaving" (click)="updateStatus(sale)">Guardar</button>
+      </div>
+    </article>
+  </div>
+</section>

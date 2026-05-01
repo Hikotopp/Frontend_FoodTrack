@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { environment } from '../../../../../environments/environment';
+import { environment } from '../../../../environments/environment';
 import { TablePort } from '../../../domain/ports/table.port';
 import { TableSummary, TableDashboard } from '../../../domain/entities/table.entity';
 

@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { TablePort } from '../../../domain/ports/table.port';
+import { TableHttpAdapter } from '../../adapters/http/table-http.adapter';
 import { TableDashboard } from '../../../domain/entities/table.entity';
 
 @Injectable({ providedIn: 'root' })
 export class GetDashboardUseCase {
-  constructor(private tablePort: TablePort) {}
+  constructor(private tableHttp: TableHttpAdapter) {}
   execute(id: number): Observable<TableDashboard> {
-    return this.tablePort.getTableDashboard(id);
+    return this.tableHttp.getTableDashboard(id);
   }
 }

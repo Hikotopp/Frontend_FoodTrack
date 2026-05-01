@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { TablePort } from '../../../domain/ports/table.port';
+import { TableHttpAdapter } from '../../adapters/http/table-http.adapter';
 import { TableSummary } from '../../../domain/entities/table.entity';
 
 @Injectable({ providedIn: 'root' })
 export class CreateTableUseCase {
-  constructor(private tablePort: TablePort) {}
+  constructor(private tableHttp: TableHttpAdapter) {}
   execute(tableNumber: number): Observable<TableSummary> {
-    return this.tablePort.createTable(tableNumber);
+    return this.tableHttp.createTable(tableNumber);
   }
 }
