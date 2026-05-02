@@ -102,6 +102,11 @@
   color: #fff;
 }
 
+.summary-metrics select option {
+  background: #ffffff;
+  color: #1f1311;
+}
+
 .metric-label {
   display: block;
   font-size: 0.8rem;

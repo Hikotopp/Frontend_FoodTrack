@@ -11,11 +11,11 @@
     </div>
 
     <div class="header-actions">
+      <button class="btn-outline" (click)="logout()">Cerrar sesión</button>
       <div class="session-chip">
         <span>{{ userName || 'Equipo FoodTrack' }}</span>
         <small>{{ userRole || 'Sesión activa' }}</small>
       </div>
-      <button class="btn-outline" (click)="logout()">Cerrar sesión</button>
     </div>
   </header>
 
@@ -40,7 +40,7 @@
 
         <div>
           <span class="metric-label">Total consumido</span>
-          <strong>{{ (view.currentOrder?.total ?? 0) | currency:'COP':'symbol':'1.0-0' }}</strong>
+          <strong>{{ (view.currentOrder?.total ?? 0) | currency:'COP':'symbol':'1.2-2' }}</strong>
         </div>
 
         <div>
@@ -69,7 +69,7 @@
         <div class="order-line" *ngFor="let line of orderLines; trackBy: trackByOrderLineId">
           <div class="line-copy">
             <strong>{{ line.itemName }}</strong>
-            <small>{{ line.subtotal | currency:'COP':'symbol':'1.0-0' }}</small>
+            <small>{{ line.subtotal | currency:'COP':'symbol':'1.2-2' }}</small>
           </div>
 
           <div class="line-actions">
@@ -103,7 +103,7 @@
           </div>
 
           <div class="menu-meta">
-            <span>{{ item.price | currency:'COP':'symbol':'1.0-0' }}</span>
+            <span>{{ item.price | currency:'COP':'symbol':'1.2-2' }}</span>
             <div class="menu-actions">
               <input type="number" min="1" [(ngModel)]="menuQuantities[item.id]" />
               <button class="btn-primary small" [disabled]="isSaving" (click)="addItem(item.id)">Agregar</button>

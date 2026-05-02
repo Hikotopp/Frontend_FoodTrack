@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 import { TablePort } from '../../../domain/ports/table.port';
-import { TableSummary, TableDashboard } from '../../../domain/entities/table.entity';
+import { TableDashboard, TableStatus, TableSummary } from '../../../domain/entities/table.entity';
 
 @Injectable({ providedIn: 'root' })
 export class TableHttpAdapter implements TablePort {
@@ -22,7 +22,7 @@ export class TableHttpAdapter implements TablePort {
   deleteTable(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
-  updateTableStatus(id: number, status: string): Observable<TableSummary> {
+  updateTableStatus(id: number, status: TableStatus): Observable<TableSummary> {
     return this.http.patch<TableSummary>(`${this.apiUrl}/${id}/status`, { status });
   }
   addOrderLine(tableId: number, menuItemId: number, quantity: number): Observable<TableDashboard> {

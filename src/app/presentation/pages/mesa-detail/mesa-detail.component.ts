@@ -4,15 +4,20 @@ import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { BaseDataComponent } from '../../../shared/base-data.component';
 import { SessionService } from '../../../infrastructure/services/session.service';
+import { AddOrderLineUseCase } from '../../../application/use-cases/tables/add-order-line.use-case';
+import { CloseOrderUseCase } from '../../../application/use-cases/tables/close-order.use-case';
+import { GetDashboardUseCase } from '../../../application/use-cases/tables/get-dashboard.use-case';
+import { RemoveOrderLineUseCase } from '../../../application/use-cases/tables/remove-order-line.use-case';
+import { UpdateOrderLineUseCase } from '../../../application/use-cases/tables/update-order-line.use-case';
+import { UpdateTableStatusUseCase } from '../../../application/use-cases/tables/update-table-status.use-case';
 import {
   MenuCategory,
   MenuItem,
   OrderLine,
   TableDashboard,
   TableSummary,
-  TableService,
   TableStatus
-} from '../../../infrastructure/services/table.service';
+} from '../../../domain/entities/table.entity';
 
 type MenuGroup = {
   category: MenuCategory;
@@ -54,7 +59,12 @@ export class MesaDetailComponent extends BaseDataComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private tableService: TableService,
+    private getDashboardUseCase: GetDashboardUseCase,
+    private updateTableStatusUseCase: UpdateTableStatusUseCase,
+    private addOrderLineUseCase: AddOrderLineUseCase,
+    private updateOrderLineUseCase: UpdateOrderLineUseCase,
+    private removeOrderLineUseCase: RemoveOrderLineUseCase,
+    private closeOrderUseCase: CloseOrderUseCase,
     private sessionService: SessionService,
     cdr: ChangeDetectorRef
   ) {
@@ -85,7 +95,7 @@ export class MesaDetailComponent extends BaseDataComponent implements OnInit {
 
   loadDashboard(): void {
     this.loadData(
-      this.tableService.getTableDashboard(this.tableId),
+      this.getDashboardUseCase.execute(this.tableId),
       (dashboard) => this.applyDashboard(dashboard),
       'No fue posible cargar el detalle de la mesa. Intenta de nuevo.'
     );
@@ -94,7 +104,7 @@ export class MesaDetailComponent extends BaseDataComponent implements OnInit {
   updateStatus(): void {
     if (!this.dashboard) return;
     this.saveData(
-      this.tableService.updateTableStatus(this.dashboard.table.id, this.statusDraft),
+      this.updateTableStatusUseCase.execute(this.dashboard.table.id, this.statusDraft),
       (summary) => this.applyTableSummary(summary),
       'No fue posible actualizar el estado de la mesa.'
     );
@@ -103,7 +113,7 @@ export class MesaDetailComponent extends BaseDataComponent implements OnInit {
   addItem(menuItemId: number): void {
     const quantity = Math.max(1, Number(this.menuQuantities[menuItemId] ?? 1));
     this.saveData(
-      this.tableService.addOrderLine(this.tableId, menuItemId, quantity),
+      this.addOrderLineUseCase.execute(this.tableId, menuItemId, quantity),
       (dashboard) => this.applyDashboard(dashboard),
       'No fue posible agregar el producto al pedido.'
     );
@@ -112,7 +122,7 @@ export class MesaDetailComponent extends BaseDataComponent implements OnInit {
   updateLine(lineId: number): void {
     const quantity = Math.max(1, Number(this.lineQuantities[lineId] ?? 1));
     this.saveData(
-      this.tableService.updateOrderLine(this.tableId, lineId, quantity),
+      this.updateOrderLineUseCase.execute(this.tableId, lineId, quantity),
       (dashboard) => this.applyDashboard(dashboard),
       'No fue posible actualizar la cantidad del item.'
     );
@@ -120,7 +130,7 @@ export class MesaDetailComponent extends BaseDataComponent implements OnInit {
 
   removeLine(lineId: number): void {
     this.saveData(
-      this.tableService.removeOrderLine(this.tableId, lineId),
+      this.removeOrderLineUseCase.execute(this.tableId, lineId),
       (dashboard) => this.applyDashboard(dashboard),
       'No fue posible quitar el item del pedido.'
     );
@@ -128,7 +138,7 @@ export class MesaDetailComponent extends BaseDataComponent implements OnInit {
 
   closeOrder(): void {
     this.saveData(
-      this.tableService.closeOrder(this.tableId),
+      this.closeOrderUseCase.execute(this.tableId),
       (dashboard) => this.applyDashboard(dashboard),
       'No fue posible cerrar la cuenta de la mesa.'
     );

@@ -36,4 +36,8 @@ export class UserAdminService {
   updateRole(userId: number, role: AccountRole): Observable<UserAccount> {
     return this.http.patch<UserAccount>(`${this.apiUrl}/${userId}/role`, { role });
   }
+
+  deleteUser(userId: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/${userId}`);
+  }
 }

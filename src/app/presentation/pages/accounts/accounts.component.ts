@@ -48,6 +48,10 @@ export class AccountsComponent extends BaseDataComponent implements OnInit {
     return this.sessionService.getStoredUser()?.fullName ?? '';
   }
 
+  get currentUserEmail(): string {
+    return this.sessionService.getStoredUser()?.email ?? '';
+  }
+
   loadUsers(): void {
     this.loadData(
       this.userAdminService.listUsers(),
@@ -68,6 +72,27 @@ export class AccountsComponent extends BaseDataComponent implements OnInit {
         this.roleDrafts[updated.id] = updated.role;
       },
       'No se pudo actualizar el tipo de cuenta.'
+    );
+  }
+
+  deleteUser(user: UserAccount): void {
+    if (user.email === this.currentUserEmail) {
+      this.errorMessage = 'No puedes eliminar tu propia cuenta desde esta sesion.';
+      return;
+    }
+
+    const confirmed = window.confirm(`Eliminar la cuenta de ${user.fullName}?`);
+    if (!confirmed) {
+      return;
+    }
+
+    this.saveData(
+      this.userAdminService.deleteUser(user.id),
+      () => {
+        this.users = this.users.filter(item => item.id !== user.id);
+        delete this.roleDrafts[user.id];
+      },
+      'No se pudo eliminar la cuenta.'
     );
   }
 
@@ -109,6 +134,10 @@ export class AccountsComponent extends BaseDataComponent implements OnInit {
 
   trackByUserId(_: number, user: UserAccount): number {
     return user.id;
+  }
+
+  isCurrentUser(user: UserAccount): boolean {
+    return user.email === this.currentUserEmail;
   }
 
   private passwordStrengthValidator(control: AbstractControl<string>): ValidationErrors | null {

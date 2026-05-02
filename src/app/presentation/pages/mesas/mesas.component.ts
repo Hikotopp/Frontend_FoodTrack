@@ -3,7 +3,10 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@
 import { Router, RouterLink } from '@angular/router';
 import { BaseDataComponent } from '../../../shared/base-data.component';
 import { SessionService } from '../../../infrastructure/services/session.service';
-import { TableService, TableStatus, TableSummary } from '../../../infrastructure/services/table.service';
+import { TableStatus, TableSummary } from '../../../domain/entities/table.entity';
+import { CreateTableUseCase } from '../../../application/use-cases/tables/create-table.use-case';
+import { DeleteTableUseCase } from '../../../application/use-cases/tables/delete-table.use-case';
+import { ListTablesUseCase } from '../../../application/use-cases/tables/list-tables.use-case';
 
 @Component({
   selector: 'app-mesas',
@@ -19,7 +22,9 @@ export class MesasComponent extends BaseDataComponent implements OnInit {
   isAdmin = false;
 
   constructor(
-    private tableService: TableService,
+    private listTablesUseCase: ListTablesUseCase,
+    private createTableUseCase: CreateTableUseCase,
+    private deleteTableUseCase: DeleteTableUseCase,
     private sessionService: SessionService,
     private router: Router,
     cdr: ChangeDetectorRef
@@ -36,7 +41,7 @@ export class MesasComponent extends BaseDataComponent implements OnInit {
 
   loadTables(): void {
     this.loadData(
-      this.tableService.listTables(),
+      this.listTablesUseCase.execute(),
       (tables) => {
         this.tables = [...tables].sort((a, b) => a.tableNumber - b.tableNumber);
       },
@@ -51,7 +56,7 @@ export class MesasComponent extends BaseDataComponent implements OnInit {
       : 1;
 
     this.saveData(
-      this.tableService.createTable(nextNumber),
+      this.createTableUseCase.execute(nextNumber),
       () => this.loadTables(),
       'No se pudo crear la mesa.'
     );
@@ -63,7 +68,7 @@ export class MesasComponent extends BaseDataComponent implements OnInit {
     if (!last) return;
 
     this.saveData(
-      this.tableService.deleteTable(last.id),
+      this.deleteTableUseCase.execute(last.id),
       () => this.loadTables(),
       'No se pudo eliminar la mesa.'
     );

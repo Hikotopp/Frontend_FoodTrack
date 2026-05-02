@@ -92,7 +92,7 @@ h1 {
 
 .table-row {
   display: grid;
-  grid-template-columns: 1.2fr 1.4fr 180px 120px;
+  grid-template-columns: 1.2fr 1.4fr 180px minmax(190px, auto);
   align-items: center;
   padding: 16px 18px;
   border-top: 1px solid rgba(202, 161, 90, 0.18);
@@ -114,6 +114,33 @@ select {
   padding: 10px 12px;
 }
 
+.row-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+}
+
+.btn-danger {
+  border: 1px solid #e06f6f;
+  border-radius: 6px;
+  background: rgba(224, 111, 111, 0.12);
+  color: #ffb7b7;
+  cursor: pointer;
+  padding: 8px 14px;
+  transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.btn-danger:hover {
+  border-color: #ffc2c2;
+  transform: translateY(-1px);
+}
+
+.btn-danger:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+  transform: none;
+}
+
 .empty-state {
   padding: 28px;
 }
@@ -131,7 +158,8 @@ select {
   .accounts-header,
   .header-actions,
   .account-form,
-  .table-row {
+  .table-row,
+  .row-actions {
     display: flex;
     flex-direction: column;
     align-items: stretch;

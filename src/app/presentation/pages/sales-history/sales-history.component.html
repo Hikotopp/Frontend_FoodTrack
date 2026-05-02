@@ -9,11 +9,11 @@
 
     <div class="header-actions">
       <button class="btn-outline" *ngIf="isAdmin" routerLink="/cuentas">Cuentas</button>
+      <button class="btn-outline" (click)="logout()">Cerrar sesión</button>
       <div class="session-card">
         <span>{{ userName || 'Sesión activa' }}</span>
         <small>{{ isAdmin ? 'Administrador' : 'Empleado' }}</small>
       </div>
-      <button class="btn-outline" (click)="logout()">Cerrar sesión</button>
     </div>
   </header>
 
@@ -29,7 +29,7 @@
           <h2>Venta #{{ sale.id }}</h2>
           <p>Mesa {{ sale.tableNumber || sale.tableId }} · {{ sale.createdByName }}</p>
         </div>
-        <strong>{{ sale.total | currency:'COP':'symbol':'1.0-0' }}</strong>
+        <strong>{{ sale.total | currency:'COP':'symbol':'1.2-2' }}</strong>
       </div>
 
       <div class="sale-meta">
@@ -40,7 +40,7 @@
       <div class="line-list">
         <div class="line-row" *ngFor="let line of sale.lines">
           <span>{{ line.quantity }} x {{ line.itemName }}</span>
-          <strong>{{ line.subtotal | currency:'COP':'symbol':'1.0-0' }}</strong>
+          <strong>{{ line.subtotal | currency:'COP':'symbol':'1.2-2' }}</strong>
         </div>
       </div>
 

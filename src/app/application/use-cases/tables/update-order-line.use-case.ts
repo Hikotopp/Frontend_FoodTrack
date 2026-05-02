@@ -1,12 +1,13 @@
-import { Injectable } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { TableHttpAdapter } from '../../adapters/http/table-http.adapter';
 import { TableDashboard } from '../../../domain/entities/table.entity';
+import { TABLE_PORT } from '../../../domain/ports/table-port.token';
+import { TablePort } from '../../../domain/ports/table.port';
 
 @Injectable({ providedIn: 'root' })
 export class UpdateOrderLineUseCase {
-  constructor(private tableHttp: TableHttpAdapter) {}
+  constructor(@Inject(TABLE_PORT) private tablePort: TablePort) {}
   execute(tableId: number, lineId: number, quantity: number): Observable<TableDashboard> {
-    return this.tableHttp.updateOrderLine(tableId, lineId, quantity);
+    return this.tablePort.updateOrderLine(tableId, lineId, quantity);
   }
 }
