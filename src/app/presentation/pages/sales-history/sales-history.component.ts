@@ -106,8 +106,8 @@ export class SalesHistoryComponent extends BaseDataComponent implements OnInit {
         const sentTo = reportService.sentTo?.join(', ') || 'administradores configurados';
         const message = reportService.emailSent
           ? `Reporte enviado a ${sentTo}.`
-          : `Reporte generado, pero no se pudo enviar a todos. ${reportService.emailError ?? ''}`.trim();
-        this.showReportToast(message, reportService.emailSent ? 'success' : 'error');
+          : `Reporte generado correctamente. ${reportService.emailError ?? ''}`.trim();
+        this.showReportToast(message, reportService.success ? 'success' : 'error');
       },
       error: () => {
         this.showReportToast('No se pudo generar el reporte.', 'error');
