@@ -143,6 +143,43 @@ select {
   color: #ffb7b7;
 }
 
+.report-toast {
+  position: fixed;
+  top: 24px;
+  right: 24px;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  max-width: min(420px, calc(100vw - 32px));
+  padding: 14px 16px;
+  border: 1px solid rgba(96, 211, 148, 0.55);
+  border-radius: 12px;
+  background: rgba(17, 38, 28, 0.96);
+  box-shadow: 0 18px 44px rgba(0, 0, 0, 0.42);
+  color: #eaffef;
+}
+
+.report-toast.error {
+  border-color: rgba(255, 151, 151, 0.62);
+  background: rgba(55, 22, 23, 0.96);
+  color: #ffe8e8;
+}
+
+.report-toast span {
+  line-height: 1.45;
+}
+
+.report-toast button {
+  flex: 0 0 auto;
+  border: 1px solid currentColor;
+  border-radius: 8px;
+  background: transparent;
+  color: inherit;
+  padding: 8px 10px;
+  cursor: pointer;
+}
+
 @media (max-width: 880px) {
   .history-shell {
     padding: 20px;
