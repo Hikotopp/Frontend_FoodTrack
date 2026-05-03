@@ -5,7 +5,8 @@ import { environment } from '../../../environments/environment';
 
 export type TableStatus = 'AVAILABLE' | 'OCCUPIED' | 'SERVING' | 'WAITING_PAYMENT' | 'CLEANING';
 export type OrderStatus = 'OPEN' | 'CLOSED' | 'CANCELLED';
-export type MenuCategory = 'APPETIZER' | 'SOUP' | 'MAIN_COURSE' | 'SALAD' | 'DESSERT' | 'DRINK';
+export type MenuCategory =
+  'APPETIZER' | 'BURGER' | 'HOT_DOG' | 'OTHER' | 'DRINK' | 'DESSERT' | 'COMBO' | 'ADDITIONAL' | 'PROMOTION';
 
 export interface TableSummary {
   id: number;

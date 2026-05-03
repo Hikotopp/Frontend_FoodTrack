@@ -8,6 +8,9 @@
     </div>
 
     <div class="header-actions">
+      <button class="btn-primary" *ngIf="isAdmin" [disabled]="isSaving" (click)="generateReport()">
+        {{ isSaving ? 'Generando...' : 'Generar reporte' }}
+      </button>
       <button class="btn-outline" *ngIf="isAdmin" routerLink="/cuentas">Cuentas</button>
       <div class="session-card">
         <span>{{ userName || 'Sesión activa' }}</span>
@@ -16,6 +19,11 @@
       <button class="btn-outline" (click)="logout()">Cerrar sesión</button>
     </div>
   </header>
+
+  <aside class="report-toast" [class.error]="reportToast.type === 'error'" *ngIf="reportToast" role="status">
+    <span>{{ reportToast.message }}</span>
+    <button type="button" aria-label="Cerrar mensaje" (click)="hideReportToast()">Cerrar</button>
+  </aside>
 
   <p class="feedback error" *ngIf="errorMessage">{{ errorMessage }}</p>
 

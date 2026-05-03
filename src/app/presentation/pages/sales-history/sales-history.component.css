@@ -143,6 +143,41 @@ select {
   color: #ffb7b7;
 }
 
+.report-toast {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  max-width: min(420px, calc(100vw - 32px));
+  padding: 14px 16px;
+  border: 1px solid rgba(115, 218, 151, 0.55);
+  border-radius: 14px;
+  background: rgba(21, 68, 42, 0.96);
+  color: #ecfff2;
+  box-shadow: 0 18px 42px rgba(0, 0, 0, 0.35);
+}
+
+.report-toast.error {
+  border-color: rgba(255, 183, 183, 0.65);
+  background: rgba(92, 27, 27, 0.96);
+  color: #fff1f1;
+}
+
+.report-toast span {
+  line-height: 1.45;
+}
+
+.report-toast button {
+  border: 0;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  font-weight: 700;
+}
+
 @media (max-width: 880px) {
   .history-shell {
     padding: 20px;
