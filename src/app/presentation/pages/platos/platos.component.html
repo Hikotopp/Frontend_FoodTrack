@@ -1,0 +1,66 @@
+<section class="plates-shell">
+  <header class="plates-header">
+    <div>
+      <button class="btn-outline back-link" routerLink="/mesas">Volver a mesas</button>
+      <p class="eyebrow">FoodTrack control center</p>
+      <h1>Platos y comida</h1>
+      <p class="intro">Administra el menu, precios, estado y cantidades disponibles para los pedidos de las mesas.</p>
+    </div>
+
+    <div class="header-actions">
+      <button class="btn-outline" routerLink="/historial">Historial</button>
+      <button class="btn-outline" routerLink="/cuentas">Cuentas</button>
+      <button class="btn-outline" (click)="logout()">Cerrar sesion</button>
+      <div class="session-card">
+        <span>{{ userName || 'Administrador' }}</span>
+        <small>Administrador</small>
+      </div>
+    </div>
+  </header>
+
+  <p class="feedback error" *ngIf="errorMessage">{{ errorMessage }}</p>
+
+  <form class="panel plate-form" [formGroup]="itemForm" (ngSubmit)="saveItem()">
+    <h2>{{ formTitle }}</h2>
+    <input formControlName="name" placeholder="Nombre del plato" />
+    <textarea formControlName="description" placeholder="Descripcion"></textarea>
+    <select formControlName="category">
+      <option *ngFor="let category of categoryOptions" [ngValue]="category">{{ formatCategory(category) }}</option>
+    </select>
+    <input type="number" min="1" formControlName="price" placeholder="Precio" />
+    <input type="number" min="0" formControlName="stockQuantity" placeholder="Cantidad disponible" />
+    <label class="check-row">
+      <input type="checkbox" formControlName="active" />
+      Disponible en menu
+    </label>
+    <div class="form-actions">
+      <button class="btn-primary" type="submit" [disabled]="isSaving">{{ editingItem ? 'Guardar' : 'Agregar' }}</button>
+      <button class="btn-outline" type="button" [disabled]="isSaving" (click)="resetForm()">Limpiar</button>
+    </div>
+  </form>
+
+  <div class="empty-state panel" *ngIf="isLoading">Cargando platos desde el backend...</div>
+
+  <div class="plates-table panel" *ngIf="!isLoading">
+    <div class="table-row table-head">
+      <span>Plato</span>
+      <span>Categoria</span>
+      <span>Precio</span>
+      <span>Cantidad</span>
+      <span>Estado</span>
+      <span>Acciones</span>
+    </div>
+
+    <div class="table-row" *ngFor="let item of items; trackBy: trackByItemId">
+      <strong>{{ item.name }}</strong>
+      <span>{{ formatCategory(item.category) }}</span>
+      <span>{{ item.price | currency:'COP':'symbol':'1.2-2' }}</span>
+      <span>{{ item.stockQuantity }}</span>
+      <span [class.muted]="!item.available">{{ item.available ? 'Disponible' : 'Oculto' }}</span>
+      <div class="row-actions">
+        <button class="btn-primary" [disabled]="isSaving" (click)="editItem(item)">Editar</button>
+        <button class="btn-danger" [disabled]="isSaving" (click)="deleteItem(item)">Eliminar</button>
+      </div>
+    </div>
+  </div>
+</section>

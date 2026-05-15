@@ -5,6 +5,7 @@ import { MesasComponent } from './presentation/pages/mesas/mesas.component';
 import { MesaDetailComponent } from './presentation/pages/mesa-detail/mesa-detail.component';
 import { SalesHistoryComponent } from './presentation/pages/sales-history/sales-history.component';
 import { AccountsComponent } from './presentation/pages/accounts/accounts.component';
+import { PlatosComponent } from './presentation/pages/platos/platos.component';
 import { authGuard } from './presentation/guards/auth.guard';
 import { adminGuard } from './presentation/guards/admin.guard';
 
@@ -17,5 +18,6 @@ export const routes: Routes = [
   { path: 'mesas/:id', component: MesaDetailComponent, canActivate: [authGuard] },
   { path: 'historial', component: SalesHistoryComponent, canActivate: [authGuard] },
   { path: 'cuentas', component: AccountsComponent, canActivate: [adminGuard] },
+  { path: 'platos', component: PlatosComponent, canActivate: [adminGuard] },
   { path: '**', redirectTo: 'home' }
 ];

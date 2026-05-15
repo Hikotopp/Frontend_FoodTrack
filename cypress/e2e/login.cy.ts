@@ -3,8 +3,8 @@ describe('Login FoodTrack', () => {
   // Login antes de cada prueba
   beforeEach(() => {
     cy.visit('http://localhost:4200/login');
-    cy.get('input[name="email"]').type('jacobmunoz992@gmail.com');
-    cy.get('input[name="password"]').type('Jacobmunoz06.');
+    cy.get('input[name="email"]').type(Cypress.env('ADMIN_EMAIL') ?? 'admin@foodtrack.local');
+    cy.get('input[name="password"]').type(Cypress.env('ADMIN_PASSWORD') ?? 'Admin123!');
     cy.contains('button', 'Ingresar').click();
     cy.url().should('include', '/mesas');
   });

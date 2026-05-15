@@ -42,7 +42,8 @@ export class MesaDetailComponent extends BaseDataComponent implements OnInit {
   lineQuantities: Record<number, number> = {};
 
   private readonly categoryOrder: MenuCategory[] = [
-    'APPETIZER', 'BURGER', 'HOT_DOG', 'OTHER', 'DRINK', 'DESSERT', 'COMBO', 'ADDITIONAL', 'PROMOTION'
+    'APPETIZER', 'BURGER', 'HOT_DOG', 'OTHER', 'DRINK', 'DESSERT', 'COMBO', 'ADDITIONAL', 'PROMOTION',
+    'SOUP', 'MAIN_COURSE', 'SALAD'
   ];
   readonly categoryLabels: Record<MenuCategory, string> = {
     APPETIZER: 'Entradas',
@@ -53,7 +54,10 @@ export class MesaDetailComponent extends BaseDataComponent implements OnInit {
     DESSERT: 'Postres',
     COMBO: 'Combos',
     ADDITIONAL: 'Adicionales y salsas',
-    PROMOTION: 'Promos'
+    PROMOTION: 'Promos',
+    SOUP: 'Sopas',
+    MAIN_COURSE: 'Platos fuertes',
+    SALAD: 'Ensaladas'
   };
   readonly statusOptions: TableStatus[] = [
     'AVAILABLE', 'OCCUPIED', 'SERVING', 'WAITING_PAYMENT', 'CLEANING'

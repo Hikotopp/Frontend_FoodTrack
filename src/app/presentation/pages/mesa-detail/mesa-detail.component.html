@@ -104,8 +104,9 @@
 
           <div class="menu-meta">
             <span>{{ item.price | currency:'COP':'symbol':'1.2-2' }}</span>
+            <small>{{ item.stockQuantity }} disponibles</small>
             <div class="menu-actions">
-              <input type="number" min="1" [(ngModel)]="menuQuantities[item.id]" />
+              <input type="number" min="1" [max]="item.stockQuantity" [(ngModel)]="menuQuantities[item.id]" />
               <button class="btn-primary small" [disabled]="isSaving" (click)="addItem(item.id)">Agregar</button>
             </div>
           </div>

@@ -1,6 +1,7 @@
 export type TableStatus = 'AVAILABLE' | 'OCCUPIED' | 'SERVING' | 'WAITING_PAYMENT' | 'CLEANING';
 export type MenuCategory =
-  'APPETIZER' | 'BURGER' | 'HOT_DOG' | 'OTHER' | 'DRINK' | 'DESSERT' | 'COMBO' | 'ADDITIONAL' | 'PROMOTION';
+  'APPETIZER' | 'BURGER' | 'HOT_DOG' | 'OTHER' | 'DRINK' | 'DESSERT' | 'COMBO' | 'ADDITIONAL' | 'PROMOTION' |
+  'SOUP' | 'MAIN_COURSE' | 'SALAD';
 export type OrderStatus = 'OPEN' | 'CLOSED' | 'CANCELLED';
 
 export interface MenuItem {
@@ -9,7 +10,8 @@ export interface MenuItem {
   description: string;
   category: MenuCategory;
   price: number;
-  active: boolean;
+  stockQuantity: number;
+  available: boolean;
 }
 
 export interface OrderLine {
