@@ -89,6 +89,19 @@ h2 {
   grid-column: 1 / -1;
 }
 
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.field span {
+  color: #f5d48f;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
 input,
 textarea,
 select {

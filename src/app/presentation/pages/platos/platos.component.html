@@ -22,13 +22,28 @@
 
   <form class="panel plate-form" [formGroup]="itemForm" (ngSubmit)="saveItem()">
     <h2>{{ formTitle }}</h2>
-    <input formControlName="name" placeholder="Nombre del plato" />
-    <textarea formControlName="description" placeholder="Descripcion"></textarea>
-    <select formControlName="category">
-      <option *ngFor="let category of categoryOptions" [ngValue]="category">{{ formatCategory(category) }}</option>
-    </select>
-    <input type="number" min="1" formControlName="price" placeholder="Precio" />
-    <input type="number" min="0" formControlName="stockQuantity" placeholder="Cantidad disponible" />
+    <label class="field">
+      <span>Nombre</span>
+      <input formControlName="name" placeholder="Nombre del plato" />
+    </label>
+    <label class="field">
+      <span>Descripcion</span>
+      <textarea formControlName="description" placeholder="Descripcion del plato"></textarea>
+    </label>
+    <label class="field">
+      <span>Categoria</span>
+      <select formControlName="category">
+        <option *ngFor="let category of categoryOptions" [ngValue]="category">{{ formatCategory(category) }}</option>
+      </select>
+    </label>
+    <label class="field">
+      <span>Precio</span>
+      <input type="number" min="1" formControlName="price" placeholder="Precio en COP" />
+    </label>
+    <label class="field">
+      <span>Cantidad disponible</span>
+      <input type="number" min="0" formControlName="stockQuantity" placeholder="Unidades" />
+    </label>
     <label class="check-row">
       <input type="checkbox" formControlName="active" />
       Disponible en menu
