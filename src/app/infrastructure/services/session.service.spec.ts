@@ -1,7 +1,6 @@
 import { TestBed } from '@angular/core/testing';
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
-import { SessionService } from './session.service';
-import { StoredUser } from './session.service';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { SessionService, StoredUser } from './session.service';
 
 describe('SessionService', () => {
   let service: SessionService;
