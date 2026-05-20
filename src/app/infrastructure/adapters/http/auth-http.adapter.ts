@@ -7,8 +7,8 @@ import { AuthResponse } from '../../../domain/entities/user.entity';
 
 @Injectable({ providedIn: 'root' })
 export class AuthHttpAdapter implements AuthPort {
-  private apiUrl = `${environment.apiUrl}/auth`;
-  constructor(private http: HttpClient) {}
+  private readonly apiUrl = `${environment.apiUrl}/auth`;
+  constructor(private readonly http: HttpClient) {}
 
   login(email: string, password: string): Observable<AuthResponse> {
     return this.http.post<AuthResponse>(`${this.apiUrl}/login`, { email, password });

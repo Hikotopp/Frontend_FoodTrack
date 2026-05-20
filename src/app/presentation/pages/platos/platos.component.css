@@ -155,10 +155,10 @@ textarea {
 }
 
 .btn-danger {
-  border: 1px solid #e06f6f;
+  border: 1px solid #ff9b9b;
   border-radius: 6px;
-  background: rgba(224, 111, 111, 0.12);
-  color: #ffb7b7;
+  background: #3b1515;
+  color: #ffdede;
   cursor: pointer;
   padding: 8px 14px;
 }

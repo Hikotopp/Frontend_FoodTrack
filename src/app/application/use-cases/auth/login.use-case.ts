@@ -7,8 +7,8 @@ import { AuthResponse } from '../../../domain/entities/user.entity';
 @Injectable({ providedIn: 'root' })
 export class LoginUseCase {
   constructor(
-    private authHttp: AuthHttpAdapter,
-    private localStorage: LocalStorageAdapter
+    private readonly authHttp: AuthHttpAdapter,
+    private readonly localStorage: LocalStorageAdapter
   ) {}
 
   execute(email: string, password: string): Observable<AuthResponse> {

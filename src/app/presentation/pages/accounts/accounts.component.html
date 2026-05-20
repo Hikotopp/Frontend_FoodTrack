@@ -22,12 +22,17 @@
 
   <form class="panel account-form" [formGroup]="accountForm" (ngSubmit)="createUser()">
     <input
+      id="accountFullName"
+      name="fullName"
+      type="text"
       formControlName="fullName"
       placeholder="Nombre"
       autocomplete="name"
       required
     />
     <input
+      id="accountEmail"
+      name="email"
       type="email"
       formControlName="email"
       placeholder="Correo"
@@ -35,6 +40,8 @@
       required
     />
     <input
+      id="accountPassword"
+      name="password"
       type="password"
       formControlName="password"
       placeholder="Contraseña temporal"

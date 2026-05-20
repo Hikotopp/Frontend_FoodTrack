@@ -18,8 +18,8 @@ export class AuthService {
   private readonly apiUrl = environment.apiUrl;
 
   constructor(
-    private http: HttpClient,
-    private session: SessionService
+    private readonly http: HttpClient,
+    private readonly session: SessionService
   ) {}
 
   login(email: string, password: string): Observable<LoginResponse> {

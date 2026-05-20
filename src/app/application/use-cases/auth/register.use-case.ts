@@ -5,7 +5,7 @@ import { AuthResponse } from '../../../domain/entities/user.entity';
 
 @Injectable({ providedIn: 'root' })
 export class RegisterUseCase {
-  constructor(private authHttp: AuthHttpAdapter) {}
+  constructor(private readonly authHttp: AuthHttpAdapter) {}
 
   execute(fullName: string, email: string, password: string): Observable<AuthResponse> {
     return this.authHttp.register(fullName, email, password);

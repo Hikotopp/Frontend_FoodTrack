@@ -7,8 +7,8 @@ import { TableDashboard, TableStatus, TableSummary } from '../../../domain/entit
 
 @Injectable({ providedIn: 'root' })
 export class TableHttpAdapter implements TablePort {
-  private apiUrl = `${environment.apiUrl}/tables`;
-  constructor(private http: HttpClient) {}
+  private readonly apiUrl = `${environment.apiUrl}/tables`;
+  constructor(private readonly http: HttpClient) {}
 
   listTables(): Observable<TableSummary[]> {
     return this.http.get<TableSummary[]>(this.apiUrl);

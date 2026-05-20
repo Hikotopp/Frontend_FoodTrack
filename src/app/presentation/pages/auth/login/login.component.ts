@@ -17,8 +17,8 @@ export class LoginComponent {
   errorMessage = '';
 
   constructor(
-    private loginUseCase: LoginUseCase,
-    private router: Router
+    private readonly loginUseCase: LoginUseCase,
+    private readonly router: Router
   ) {}
 
   submit(): void {

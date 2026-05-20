@@ -6,7 +6,7 @@ import { TablePort } from '../../../domain/ports/table.port';
 
 @Injectable({ providedIn: 'root' })
 export class UpdateTableStatusUseCase {
-  constructor(@Inject(TABLE_PORT) private tablePort: TablePort) {}
+  constructor(@Inject(TABLE_PORT) private readonly tablePort: TablePort) {}
   execute(id: number, status: TableStatus): Observable<TableSummary> {
     return this.tablePort.updateTableStatus(id, status);
   }

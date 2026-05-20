@@ -8,9 +8,9 @@ export abstract class BaseDataComponent implements OnDestroy {
   isSaving = false;
   errorMessage = '';
   protected readonly requestTimeoutMs = 15000;
-  protected destroy$ = new Subject<void>();
+  protected readonly destroy$ = new Subject<void>();
 
-  constructor(protected cdr: ChangeDetectorRef) {}
+  constructor(protected readonly cdr: ChangeDetectorRef) {}
 
   ngOnDestroy(): void {
     this.destroy$.next();

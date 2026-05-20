@@ -6,7 +6,7 @@ import { TablePort } from '../../../domain/ports/table.port';
 
 @Injectable({ providedIn: 'root' })
 export class AddOrderLineUseCase {
-  constructor(@Inject(TABLE_PORT) private tablePort: TablePort) {}
+  constructor(@Inject(TABLE_PORT) private readonly tablePort: TablePort) {}
   execute(tableId: number, menuItemId: number, quantity: number): Observable<TableDashboard> {
     return this.tablePort.addOrderLine(tableId, menuItemId, quantity);
   }

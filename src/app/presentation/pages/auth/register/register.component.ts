@@ -21,8 +21,8 @@ export class RegisterComponent {
   errorMessage = '';
 
   constructor(
-    private registerUseCase: RegisterUseCase,
-    private router: Router
+    private readonly registerUseCase: RegisterUseCase,
+    private readonly router: Router
   ) {}
 
   submit(): void {

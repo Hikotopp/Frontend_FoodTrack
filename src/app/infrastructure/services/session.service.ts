@@ -79,7 +79,7 @@ export class SessionService {
     }
 
     try {
-      const base64 = encodedPayload.replace(/-/g, '+').replace(/_/g, '/');
+      const base64 = encodedPayload.replaceAll('-', '+').replaceAll('_', '/');
       const padded = base64.padEnd(base64.length + (4 - base64.length % 4) % 4, '=');
       return JSON.parse(atob(padded));
     } catch {

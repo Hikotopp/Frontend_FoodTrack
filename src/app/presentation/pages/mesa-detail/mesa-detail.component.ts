@@ -1,7 +1,7 @@
 import { CommonModule, CurrencyPipe } from '@angular/common';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { BaseDataComponent } from '../../../shared/base-data.component';
 import { SessionService } from '../../../infrastructure/services/session.service';
 import { AddOrderLineUseCase } from '../../../application/use-cases/tables/add-order-line.use-case';
@@ -28,7 +28,7 @@ type MenuGroup = {
 @Component({
   selector: 'app-mesa-detail',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink, CurrencyPipe],
+  imports: [CommonModule, FormsModule, CurrencyPipe],
   templateUrl: './mesa-detail.component.html',
   styleUrls: ['./mesa-detail.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -64,15 +64,15 @@ export class MesaDetailComponent extends BaseDataComponent implements OnInit {
   ];
 
   constructor(
-    private route: ActivatedRoute,
-    private router: Router,
-    private getDashboardUseCase: GetDashboardUseCase,
-    private updateTableStatusUseCase: UpdateTableStatusUseCase,
-    private addOrderLineUseCase: AddOrderLineUseCase,
-    private updateOrderLineUseCase: UpdateOrderLineUseCase,
-    private removeOrderLineUseCase: RemoveOrderLineUseCase,
-    private closeOrderUseCase: CloseOrderUseCase,
-    private sessionService: SessionService,
+    private readonly route: ActivatedRoute,
+    private readonly router: Router,
+    private readonly getDashboardUseCase: GetDashboardUseCase,
+    private readonly updateTableStatusUseCase: UpdateTableStatusUseCase,
+    private readonly addOrderLineUseCase: AddOrderLineUseCase,
+    private readonly updateOrderLineUseCase: UpdateOrderLineUseCase,
+    private readonly removeOrderLineUseCase: RemoveOrderLineUseCase,
+    private readonly closeOrderUseCase: CloseOrderUseCase,
+    private readonly sessionService: SessionService,
     cdr: ChangeDetectorRef
   ) {
     super(cdr);

@@ -31,10 +31,10 @@ export class SalesHistoryComponent extends BaseDataComponent implements OnInit {
   private reportToastTimeoutId: ReturnType<typeof setTimeout> | null = null;
 
   constructor(
-    private salesHistoryService: SalesHistoryService,
-    private adminReportService: AdminReportService,
-    private sessionService: SessionService,
-    private router: Router,
+    private readonly salesHistoryService: SalesHistoryService,
+    private readonly adminReportService: AdminReportService,
+    private readonly sessionService: SessionService,
+    private readonly router: Router,
     cdr: ChangeDetectorRef
   ) {
     super(cdr);

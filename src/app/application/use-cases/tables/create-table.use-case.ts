@@ -6,7 +6,7 @@ import { TablePort } from '../../../domain/ports/table.port';
 
 @Injectable({ providedIn: 'root' })
 export class CreateTableUseCase {
-  constructor(@Inject(TABLE_PORT) private tablePort: TablePort) {}
+  constructor(@Inject(TABLE_PORT) private readonly tablePort: TablePort) {}
   execute(tableNumber: number): Observable<TableSummary> {
     return this.tablePort.createTable(tableNumber);
   }

@@ -22,11 +22,11 @@ export class MesasComponent extends BaseDataComponent implements OnInit {
   isAdmin = false;
 
   constructor(
-    private listTablesUseCase: ListTablesUseCase,
-    private createTableUseCase: CreateTableUseCase,
-    private deleteTableUseCase: DeleteTableUseCase,
-    private sessionService: SessionService,
-    private router: Router,
+    private readonly listTablesUseCase: ListTablesUseCase,
+    private readonly createTableUseCase: CreateTableUseCase,
+    private readonly deleteTableUseCase: DeleteTableUseCase,
+    private readonly sessionService: SessionService,
+    private readonly router: Router,
     cdr: ChangeDetectorRef
   ) {
     super(cdr);

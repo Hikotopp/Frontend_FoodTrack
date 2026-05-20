@@ -20,10 +20,10 @@
     </div>
   </header>
 
-  <aside class="report-toast" [class.error]="reportToast.type === 'error'" *ngIf="reportToast" role="status">
+  <output class="report-toast" [class.error]="reportToast.type === 'error'" *ngIf="reportToast">
     <span>{{ reportToast.message }}</span>
     <button type="button" aria-label="Cerrar mensaje" (click)="hideReportToast()">Cerrar</button>
-  </aside>
+  </output>
 
   <p class="feedback error" *ngIf="errorMessage">{{ errorMessage }}</p>
 

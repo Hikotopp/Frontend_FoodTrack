@@ -29,7 +29,15 @@
   <div class="empty-state panel" *ngIf="!isLoading && tables.length === 0">Todavia no hay mesas registradas.</div>
 
   <div class="table-grid" *ngIf="!isLoading && tables.length > 0">
-    <article class="table-card" *ngFor="let table of tables; trackBy: trackByTableId" (click)="openTable(table)">
+    <article
+      class="table-card"
+      *ngFor="let table of tables; trackBy: trackByTableId"
+      role="button"
+      tabindex="0"
+      (click)="openTable(table)"
+      (keydown.enter)="openTable(table)"
+      (keydown.space)="openTable(table)"
+    >
       <img src="assets/mesa.png" alt="Mesa">
       <h2>Mesa {{ table.tableNumber }}</h2>
       <span class="status">{{ formatStatus(table.status) }}</span>

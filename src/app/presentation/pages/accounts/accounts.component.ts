@@ -17,7 +17,7 @@ import { AccountRole, UserAccount, UserAdminService } from '../../../infrastruct
 export class AccountsComponent extends BaseDataComponent implements OnInit {
   users: UserAccount[] = [];
   roleDrafts: Record<number, AccountRole> = {};
-  private readonly passwordPattern = /^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]).{8,64}$/;
+  private readonly passwordPattern = /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]).{8,64}$/;
   readonly roleOptions: AccountRole[] = ['ADMIN', 'EMPLOYEE'];
   readonly accountForm = this.formBuilder.nonNullable.group({
     fullName: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(120)]],
@@ -27,10 +27,10 @@ export class AccountsComponent extends BaseDataComponent implements OnInit {
   });
 
   constructor(
-    private userAdminService: UserAdminService,
-    private sessionService: SessionService,
-    private router: Router,
-    private formBuilder: FormBuilder,
+    private readonly userAdminService: UserAdminService,
+    private readonly sessionService: SessionService,
+    private readonly router: Router,
+    private readonly formBuilder: FormBuilder,
     cdr: ChangeDetectorRef
   ) {
     super(cdr);
@@ -81,7 +81,7 @@ export class AccountsComponent extends BaseDataComponent implements OnInit {
       return;
     }
 
-    const confirmed = window.confirm(`Eliminar la cuenta de ${user.fullName}?`);
+    const confirmed = globalThis.confirm(`Eliminar la cuenta de ${user.fullName}?`);
     if (!confirmed) {
       return;
     }
