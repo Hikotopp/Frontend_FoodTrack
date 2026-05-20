@@ -9,9 +9,9 @@ describe('SessionService', () => {
 
   const createToken = (expirationInSeconds: number): string => {
     const payload = btoa(JSON.stringify({ exp: expirationInSeconds }))
-      .replace(/\+/g, '-')
-      .replace(/\//g, '_')
-      .replace(/=+$/, '');
+      .replaceAll('+', '-')
+      .replaceAll('/', '_')
+      .split('=')[0];
     return `header.${payload}.signature`;
   };
 
