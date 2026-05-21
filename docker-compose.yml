@@ -6,7 +6,6 @@ services:
       - "4200:80"
     networks:
       - foodtrack-network
-    restart: unless-stopped
 
 networks:
   foodtrack-network:
