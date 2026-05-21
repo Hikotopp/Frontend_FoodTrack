@@ -1,0 +1,14 @@
+services:
+  frontend:
+    build: .
+    container_name: foodtrack-frontend
+    ports:
+      - "4200:80"
+    networks:
+      - foodtrack-network
+    restart: unless-stopped
+
+networks:
+  foodtrack-network:
+    name: foodtrack-network
+    external: true
