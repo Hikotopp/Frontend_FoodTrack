@@ -128,7 +128,7 @@ export class PlatosComponent extends BaseDataComponent implements OnInit {
   }
 
   deleteItem(item: MenuItem): void {
-    const confirmed = window.confirm(`Eliminar ${item.name} del menu?`);
+    const confirmed = globalThis.confirm(`Eliminar ${item.name} del menu?`);
     if (!confirmed) {
       return;
     }
