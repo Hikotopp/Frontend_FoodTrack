@@ -1,0 +1,13 @@
+services:
+  frontend:
+    image: ${DOCKERHUB_USERNAME:?DOCKERHUB_USERNAME is required}/foodtrack-frontend:latest
+    container_name: foodtrack-frontend
+    ports:
+      - "4200:80"
+    networks:
+      - foodtrack-network
+
+networks:
+  foodtrack-network:
+    name: foodtrack-network
+    external: true
