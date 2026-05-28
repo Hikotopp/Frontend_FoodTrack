@@ -38,7 +38,8 @@ describe('AccountsComponent', () => {
     ]);
     mockSessionService = jasmine.createSpyObj<SessionService>('SessionService', [
       'hasRole',
-      'getStoredUser'
+      'getStoredUser',
+      'logout'
     ]);
     mockRouter = jasmine.createSpyObj<Router>('Router', ['navigate']);
 
@@ -133,5 +134,95 @@ describe('AccountsComponent', () => {
   it('should validate required form fields', () => {
     component.accountForm.reset();
     expect(component.accountForm.valid).toBe(false);
+  });
+
+  it('should update a user role', () => {
+    const updatedUser = { ...testUser, role: 'ADMIN' as AccountRole };
+    component.users = [testUser];
+    component.roleDrafts = { [testUser.id]: 'ADMIN' };
+    mockUserAdminService.updateRole.and.returnValue(of(updatedUser));
+
+    component.updateRole(testUser);
+
+    expect(mockUserAdminService.updateRole).toHaveBeenCalledWith(testUser.id, 'ADMIN');
+    expect(component.users[0].role).toBe('ADMIN');
+    expect(component.roleDrafts[testUser.id]).toBe('ADMIN');
+  });
+
+  it('should delete a confirmed user', () => {
+    spyOn(globalThis, 'confirm').and.returnValue(true);
+    component.users = [testUser, adminUser];
+    component.roleDrafts = { [testUser.id]: 'EMPLOYEE', [adminUser.id]: 'ADMIN' };
+    mockUserAdminService.deleteUser.and.returnValue(of(void 0));
+
+    component.deleteUser(testUser);
+
+    expect(mockUserAdminService.deleteUser).toHaveBeenCalledWith(testUser.id);
+    expect(component.users).toEqual([adminUser]);
+    expect(component.roleDrafts[testUser.id]).toBeUndefined();
+  });
+
+  it('should not delete a user when confirmation is cancelled', () => {
+    spyOn(globalThis, 'confirm').and.returnValue(false);
+
+    component.deleteUser(testUser);
+
+    expect(mockUserAdminService.deleteUser).not.toHaveBeenCalled();
+  });
+
+  it('should create a user with trimmed form values', () => {
+    const createdUser: UserAccount = {
+      id: 3,
+      fullName: 'Alice User',
+      email: 'alice@example.com',
+      role: 'EMPLOYEE'
+    };
+    mockUserAdminService.createUser.and.returnValue(of(createdUser));
+    component.accountForm.setValue({
+      fullName: 'Alice User',
+      email: 'alice@example.com',
+      password: 'Secret123!',
+      role: 'EMPLOYEE'
+    });
+
+    component.createUser();
+
+    expect(mockUserAdminService.createUser).toHaveBeenCalledWith({
+      fullName: 'Alice User',
+      email: 'alice@example.com',
+      password: 'Secret123!',
+      role: 'EMPLOYEE'
+    });
+    expect(component.users).toEqual([createdUser]);
+    expect(component.roleDrafts[createdUser.id]).toBe('EMPLOYEE');
+  });
+
+  it('should mark invalid create form and show password guidance', () => {
+    component.accountForm.setValue({
+      fullName: 'Al',
+      email: 'invalid-email',
+      password: 'weak',
+      role: 'EMPLOYEE'
+    });
+
+    component.createUser();
+
+    expect(mockUserAdminService.createUser).not.toHaveBeenCalled();
+    expect(component.errorMessage).toContain('contrasena');
+  });
+
+  it('should format roles and identify the current user', () => {
+    expect(component.formatRole('ADMIN')).toBe('Administrador');
+    expect(component.formatRole('EMPLOYEE')).toBe('Empleado');
+    expect(component.trackByUserId(0, testUser)).toBe(testUser.id);
+    expect(component.isCurrentUser(adminUser)).toBeTrue();
+    expect(component.isCurrentUser(testUser)).toBeFalse();
+  });
+
+  it('should logout and navigate home', () => {
+    component.logout();
+
+    expect(mockSessionService.logout).toHaveBeenCalled();
+    expect(mockRouter.navigate).toHaveBeenCalledWith(['/']);
   });
 });
