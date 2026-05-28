@@ -2,7 +2,7 @@ describe('Login FoodTrack', () => {
 
   // Login antes de cada prueba
   beforeEach(() => {
-    cy.visit('http://localhost:4200/login');
+    cy.visit('/login');
     cy.get('input[name="email"]').type(Cypress.env('ADMIN_EMAIL') ?? 'admin@foodtrack.local');
     cy.get('input[name="password"]').type(Cypress.env('ADMIN_PASSWORD') ?? 'Admin123!');
     cy.contains('button', 'Ingresar').click();

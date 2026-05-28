@@ -34,6 +34,9 @@ yarn-error.log
 .sass-cache/
 /connect.lock
 /coverage
+.env
+.env.*
+!.env.production.example
 /libpeerconnection.log
 testem.log
 /typings
